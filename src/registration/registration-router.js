@@ -21,12 +21,12 @@ registrationRouter
       if (passwordError)
         return res.status(400).json({ error: passwordError });
 
-      const hasTeacherWithName = await RegistrationService.hasTeacherWithName(
+      const hasTeacherWithEmail = await RegistrationService.hasTeacherWithEmail(
         req.app.get('db'),
-        username
+        email
       );
 
-      if (hasTeacherWithName)
+      if (hasTeacherWithEmail)
         return res.status(400).json({ error: 'Name already taken' });
 
       const hashedPassword = await  RegistrationService.hashPassword(password);
