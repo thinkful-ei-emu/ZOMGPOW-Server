@@ -7,9 +7,9 @@ const jsonBodyParser = express.json();
 
 registrationRouter
   .post('/teacher', jsonBodyParser, async (req, res, next) => {
-    const { password, username, name, email } = req.body;
+    const { password, full_name, email } = req.body;
 
-    for (const field of ['name', 'username', 'password', 'email'])
+    for (const field of ['full_name', 'password', 'email'])
       if (!req.body[field])
         return res.status(400).json({
           error: `Missing '${field}' in request body`
@@ -21,20 +21,19 @@ registrationRouter
       if (passwordError)
         return res.status(400).json({ error: passwordError });
 
-      const hasTeacherWithUserName = await RegistrationService.hasTeacherWithUserName(
+      const hasTeacherWithName = await RegistrationService.hasTeacherWithName(
         req.app.get('db'),
         username
       );
 
-      if (hasTeacherWithUserName)
-        return res.status(400).json({ error: 'Username already taken' });
+      if (hasTeacherWithName)
+        return res.status(400).json({ error: 'Name already taken' });
 
       const hashedPassword = await  RegistrationService.hashPassword(password);
 
       const newUser = {
-        username,
+        full_name,
         password: hashedPassword,
-        name,
         email,
       };
 
