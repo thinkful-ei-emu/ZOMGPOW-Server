@@ -1,6 +1,5 @@
 CREATE TABLE teachers (
   id SERIAL PRIMARY KEY,
-  user_name TEXT NOT NULL UNIQUE,
   full_name TEXT NOT NULL,
   password TEXT NOT NULL,
   email TEXT NOT NULL UNIQUE,
@@ -47,8 +46,8 @@ CREATE TABLE student_goals (
     REFERENCES students(id) ON DELETE CASCADE NOT NULL,
   goal_id INTEGER NOT NULL
     REFERENCES goals(id) ON DELETE CASCADE NOT NULL,
-  isComplete boolean
-)
+  isComplete boolean DEFAULT false
+);
 
 CREATE TABLE subgoals (
   id SERIAL PRIMARY KEY,
@@ -57,5 +56,5 @@ CREATE TABLE subgoals (
   goal_title VARCHAR,
   goal_description TEXT,
   date_created  TIMESTAMPTZ NOT NULL DEFAULT now(),
-  isComplete boolean
+  isComplete boolean DEFAULT false
 );
