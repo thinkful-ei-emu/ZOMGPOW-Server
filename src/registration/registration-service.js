@@ -4,7 +4,7 @@ const REGEX_UPPER_LOWER_NUMBER_SPECIAL = /(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*
 
 const RegistrationService = {
   hasTeacherWithEmail(db, email) {
-    return db('teacher')
+    return db('teachers')
       .where({ email })
       .first()
       .then(user => !!user);
@@ -12,7 +12,14 @@ const RegistrationService = {
   insertTeacherUser(db, newUser) {
     return db
       .insert(newUser)
-      .into('teacher')
+      .into('teachers')
+      .returning('*')
+      .then(([user]) => user);
+  },
+  insertStudentUser(db, newUser){
+    return db
+      .insert(newUser)
+      .into('students')
       .returning('*')
       .then(([user]) => user);
   },
@@ -41,6 +48,36 @@ const RegistrationService = {
       email: user.email,
     };
   },
+  serializeStudentUser(user){
+    return {
+      id: user.id,
+      user_name: user.user_name,
+      full_name: user.full_name,
+      class_id: user.class_id,
+    };
+  },
+  createStudentUserName(full_name){
+    // creates username formatted to first initial of first name plus last name
+    let nameArr = full_name.split(' ');
+
+    let userName = nameArr[0].charAt(0) + nameArr[1];
+
+    return userName;
+  },
+  verifyStudentUserName(db, username){
+    return db('students')
+      .where('user_name', username)
+      .first();
+  },
+  generateNumForStudent(username){
+    // only called if student user name is already taken, adds three digit random number to UN
+    let num = Math.floor(Math.random() * Math.floor(999));
+
+    let newName = username + num;
+
+    return newName;
+  }
+
 };
 
 module.exports = RegistrationService;
