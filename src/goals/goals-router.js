@@ -1,5 +1,5 @@
 const express = require('express');
-const requireAuth = require('../middleware/jwt-auth');
+// const requireAuth = require('../middleware/jwt-auth');
 const GoalsService = require('./goals-service');
 const goalsRouter = express.Router();
 const jsonParser = express.json();
@@ -7,7 +7,7 @@ const path = require('path');
 
 goalsRouter
   .route('/:class_id')
-  .all(requireAuth)
+  // .all(requireAuth)
   .get((req, res, next) => {
     const { class_id } = req.params;
     GoalsService.getAllClassGoals(req.app.get('db'), class_id)
@@ -40,7 +40,7 @@ goalsRouter
 
 goalsRouter
   .route('/:class_id/:goal_id')
-  .all(requireAuth)
+  // .all(requireAuth)
   .delete((req, res, next) => {
     const { goal_id } = req.params;
     GoalsService.deleteGoal(
