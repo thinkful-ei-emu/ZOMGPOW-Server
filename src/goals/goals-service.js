@@ -15,7 +15,7 @@ const GoalsService = {
       .where({ class_id });
   },
   insertGoal(db, newGoal){
-    return db('gaols')
+    return db('goals')
       .insert(newGoal)
       .returning('*')
       .then(res => res[0]);
@@ -29,6 +29,24 @@ const GoalsService = {
     return db('goals')
       .where({ id })
       .update(newGoalData);
+  },
+  getStudentIds(db, class_id) {
+    return db('students')
+      .select('id')
+      .where({ class_id });
+  },
+  insertStudentGoal(db, class_id, goal_id, student_id){
+    return db('student_goals')
+      .insert({ class_id, student_id, goal_id })
+      .returning('*')
+      .then(res => res[0]);
+  },
+  async insertStudentGoals(db, goal_id, class_id){
+    let stuArr = await this.getStudentIds(db, class_id);
+    for(let i=0; i < stuArr.length; i++){
+      console.log(stuArr[i].id)
+      this.insertStudentGoal(db, class_id, goal_id, stuArr[i].id)
+    }
   }
 };
 
