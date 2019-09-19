@@ -7,7 +7,7 @@ const path = require('path');
 
 goalsRouter
   .route('/:class_id')
-  // .all(requireAuth)
+  .all(requireAuth)
   .get((req, res, next) => {
     const { class_id } = req.params;
     GoalsService.getAllClassGoals(req.app.get('db'), class_id)
@@ -39,8 +39,8 @@ goalsRouter
   });
 
 goalsRouter
-  .route('/:goal_id')
-  // .all(requireAuth)
+  .route('/:class_id/:goal_id')
+  .all(requireAuth)
   .delete((req, res, next) => {
     const { goal_id } = req.params;
     GoalsService.deleteGoal(
@@ -50,6 +50,27 @@ goalsRouter
       .then(() => res.status(204).end())
       .catch(next);
   })
-  .patch();
+  .patch(jsonParser, (req, res, next) => {
+    const { class_id } = req.params;
+    const { goal_title, goal_description } = req.body;
+    const updateGoal = { class_id, goal_title, goal_description };
+    const numberOfValues = Object.values(updateGoal).filter(Boolean).length;
+    if(numberOfValues === 0) {
+      return res.status(400).json({
+        error: {
+          message: 'Request body must contain information fields'
+        }
+      });
+    }
+    GoalsService.updateGoal(
+      req.app.get('db'),
+      req.params.goal_id,
+      updateGoal
+    )
+      .then(updated => {
+        res.status(204).end();
+      })
+      .catch(next);
+  });
 
 module.exports = goalsRouter;
