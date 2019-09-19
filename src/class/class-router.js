@@ -17,6 +17,28 @@ classRouter
         return res.json(classes);
       })
       .catch(next);
+  })
+  .post(requireAuth, bodyParser, (req, res, next) => {
+    const { class_title, classcode, teacher_id } = req.body;
+    const newClass = { class_title, classcode, teacher_id };
+    for (const [key, value] of Object.entries(newClass))
+      if (value === null)
+        return res.status(401).json({
+          error: `Missing '${key}' in request body`
+        });
+
+    newClass.teacher_id = req.user.id;
+    newClass.classcode = ClassService.randomSix();
+
+    ClassService.insertClass(
+      req.app.get('db'),
+      newClass
+    )
+      .then(newClass => {
+        res.status(201).location(`/api/class/${newClass.id}`).json(newClass);
+      })
+      .catch(next);
+
   });
 
 classRouter
@@ -24,7 +46,7 @@ classRouter
   .all(requireAuth)
   .all((req, res, next) => {
     const { class_id } = req.params;
-    console.log('class_id in params', class_id)
+    console.log('class_id in params', class_id);
 
     ClassService.getByClassId(req.app.get('db'), class_id)
       .then(singleClass => {
@@ -40,7 +62,6 @@ classRouter
       .catch(next);
   })
   .get((req, res, next) => {
-    console.log('single class', res.singleClass);
     res.json(res.singleClass);
   });
 

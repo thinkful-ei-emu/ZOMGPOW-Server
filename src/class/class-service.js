@@ -23,7 +23,18 @@ const ClassService = {
       )
       .where('students.class_id', id);
   },
-
+  insertClass(knex, newClass) {
+    return knex
+      .insert(newClass)
+      .into('classes')
+      .returning('*')
+      .then(rows => {
+        return rows[0];
+      });
+  },
+  randomSix(){ 
+    return Math.floor(Math.random() * Math.floor(999999)); 
+  }
 };
 
 module.exports = ClassService;
