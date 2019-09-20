@@ -32,7 +32,6 @@ authRouter
               user.id
             )
               .then(teachersClass => {
-
                 const serializedUser = {
                   id: user.id,
                   full_name: user.full_name,
@@ -40,17 +39,25 @@ authRouter
                   date_created: user.date_created,
                   date_modified: user.date_modified
                 };
-
                 res.send({
                   user: serializedUser,
                   class: teachersClass,
                   authToken: AuthService.createJWT(sub, payload),
-                });
-              });
-          });
+                })
+              })
+          })
       })
-      .catch(next);
-
+      .catch(next);   
+  })
+  .put('/teacher/login', requireAuth,jsonBodyParser,(req, res, next) => {
+    const sub = req.user.email;
+    const payload = {
+      user_id: req.user.id,
+      user_email: req.user.email,
+    };
+    res.send({
+      authToken: AuthService.createJWT(sub, payload),
+    });
   });
 
 authRouter
@@ -67,9 +74,9 @@ authRouter
         .then(user => {
           if (!user) {
             return res.status(400).json({ error: 'Incorrect username' });
-          }
-          return user;
-
+          }   
+        return user;
+        
         });
       const sub = loginStudent;
       const payload = {
@@ -81,17 +88,6 @@ authRouter
       })
     } catch (error) {
       next(error)
-    }
-  })
-  .put(requireAuth, (req, res) => {
-    const sub = req.user.user_name;
-    const payload = {
-      user_id: req.user.id,
-      user_name: req.user.user_name,
-    };
-    res.send({
-      authToken: AuthService.createJwt(sub, payload),
-    });
-  });
-
+    } 
+  })    
 module.exports = authRouter;
