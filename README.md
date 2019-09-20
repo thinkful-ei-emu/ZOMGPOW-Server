@@ -17,6 +17,11 @@ responds with an object containing id, full_name, user_name, and class_id
 expects an email and password
 sends back an email and an authToken
 
+/api/auth/student/login
+
+expects a username
+sends back a username
+
 GET /api/class
 response sample:  
 [ 

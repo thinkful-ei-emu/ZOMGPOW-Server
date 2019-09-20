@@ -84,7 +84,7 @@ authRouter
       next(error)
     } 
   })    
-  .put('/student/login',requireAuth, (req, res) => {
+  .put(requireAuth, (req, res) => {
     const sub = req.user.user_name;
     const payload = {
       user_id: req.user.id,
