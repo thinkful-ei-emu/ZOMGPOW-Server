@@ -42,13 +42,13 @@ classRouter
   });
 
 classRouter
-  .route('/:class_id/students')
+  .route('/:class_id')
   .all(requireAuth)
   .all((req, res, next) => {
     const { class_id } = req.params;
     console.log('class_id in params', class_id);
 
-    ClassService.getByClassId(req.app.get('db'), class_id)
+    ClassService.getClassById(req.app.get('db'), req.user.id, class_id)
       .then(singleClass => {
         if (!singleClass) {
           return res.status(404).json({
@@ -57,6 +57,31 @@ classRouter
         }
         console.log(res.singleClass)
         res.singleClass = singleClass;
+
+        next();
+      })
+      .catch(next);
+
+  })
+  .get((req, res, next) => {
+    res.json(res.singleClass);
+  });
+
+classRouter
+  .route('/:class_id/students')
+  .all(requireAuth)
+  .all((req, res, next) => {
+    const { class_id } = req.params;
+    ClassService.getStudentsByClassId(req.app.get('db'), class_id)
+      .then(singleClass => {
+        if (!singleClass) {
+          return res.status(404).json({
+            error: { message: `Class not found` }
+          });
+        }
+      
+        res.singleClass = singleClass;
+
         next();
       })
       .catch(next);
