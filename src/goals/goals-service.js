@@ -44,7 +44,6 @@ const GoalsService = {
   async insertStudentGoals(db, goal_id, class_id){
     let stuArr = await this.getStudentIds(db, class_id);
     for(let i=0; i < stuArr.length; i++){
-      console.log(stuArr[i].id)
       this.insertStudentGoal(db, class_id, goal_id, stuArr[i].id)
     }
   }

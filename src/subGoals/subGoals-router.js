@@ -52,4 +52,9 @@ subGoalRouter
     }
   });
 
+subGoalRouter
+  .route('/subgoals/:subgoal_id')
+  .delete()
+  .patch()
+
 module.exports = subGoalRouter;

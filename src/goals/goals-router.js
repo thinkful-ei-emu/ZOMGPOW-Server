@@ -34,7 +34,7 @@ goalsRouter
   });
 
 goalsRouter
-  .route('/:class_id/:goal_id')
+  .route('/goals/:goal_id')
   .all(requireAuth)
   .delete((req, res, next) => {
     const { goal_id } = req.params;
