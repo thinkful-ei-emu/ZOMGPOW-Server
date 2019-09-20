@@ -93,7 +93,7 @@ const RegistrationService = {
   },
   verifyStudentUserName(db, username){
     return db('students')
-      .where('user_name', username)
+      .where('user_name', username) 
       .first();
   },
   generateNumForStudent(username){
