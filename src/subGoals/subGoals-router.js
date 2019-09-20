@@ -54,7 +54,7 @@ subGoalRouter
   });
 
 subGoalRouter
-  .route('/subgoals/:subgoal_id')
+  .route('/subgoal/:subgoal_id')
   .delete((req, res, next) => {
     const { subgoal_id } = req.params;
     GoalsService.deleteGoal(

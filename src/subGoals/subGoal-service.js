@@ -16,7 +16,7 @@ const subGoalService ={
   getGoalSubGoals(knex, goal_id){
     return knex('subgoals')
       .select('*')
-      .where({ goal_id })
+      .where({ goal_id });
   },
   insertSubGoal(knex, newSubGoal){
     return knex
