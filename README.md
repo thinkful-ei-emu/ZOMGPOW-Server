@@ -17,6 +17,68 @@ responds with an object containing id, full_name, user_name, and class_id
 expects an email and password
 sends back an email and an authToken
 
+GET /api/class
+response sample:  
+[ 
+  {   
+    "id": 5,
+    "class_title": "5th Grade",
+    "classcode": 8321,
+    "teacher_id": 5,
+    "date_created": "2019-09-19T18:05:03.608Z",
+    "date_modified": null
+  },
+  {
+    "id": 6,
+    "class_title": "math",
+    "classcode": 148447,
+    "teacher_id": 5,
+    "date_created": "2019-09-19T21:58:33.883Z",
+    "date_modified": null
+  },
+]
+
+POST /api/class
+expects: class_title
+
+GET /api/class/:classId/students
+response sample: 
+[    
+    {
+        "full_name": "Student a",
+        "user_name": "sa",
+        "goal": "write a story about the favorite thing you did during the summer",
+        "iscomplete": false,
+        "subgoal": "brainstorm 3 ideas"
+    },
+    {
+        "full_name": "Student b",
+        "user_name": "sb",
+        "goal": "write a story about the favorite thing you did during the summer",
+        "iscomplete": false,
+        "subgoal": null
+    },
+    {
+        "full_name": "Student c",
+        "user_name": "sc",
+        "goal": "write a story about the favorite thing you did during the summer",
+        "iscomplete": false,
+        "subgoal": null
+    }
+]
+
+
+GET /api/subgoals
+response:
+
+POST /api/subgoals/:student_goal_id 
+response:
+
+GET /api/goals
+response:
+
+POST /api/goals/:class_id/:goal_id
+expects:
 
 
 ## Scripts
