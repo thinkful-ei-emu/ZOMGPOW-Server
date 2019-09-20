@@ -10,10 +10,8 @@ classRouter
   .route('/')
   .all(requireAuth)
   .get((req, res, next) => {
-    console.log(req.user);
     ClassService.getClasses(req.app.get('db'), req.user.id)
       .then(classes => {
-        console.log(classes);
         return res.json(classes);
       })
       .catch(next);
@@ -46,7 +44,6 @@ classRouter
   .all(requireAuth)
   .all((req, res, next) => {
     const { class_id } = req.params;
-    console.log('class_id in params', class_id);
 
     ClassService.getClassById(req.app.get('db'), req.user.id, class_id)
       .then(singleClass => {
@@ -55,7 +52,6 @@ classRouter
             error: { message: 'Class not found' }
           });
         }
-        console.log(res.singleClass);
         res.singleClass = singleClass;
 
         next();

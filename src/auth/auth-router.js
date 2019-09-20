@@ -8,7 +8,7 @@ authRouter
   .post('/teacher/login', jsonBodyParser, (req, res, next) => {
     const { email, password } = req.body;
     const loginUser = { email, password };
-console.log(loginUser)
+
     for (const [key, value] of Object.entries(loginUser))
       if (value == null) {
         return res.status(400).json({ error: `Missing '${key}' in request body` });
@@ -74,8 +74,7 @@ authRouter
         .then(user => {
           if (!user) {
             return res.status(400).json({ error: 'Incorrect username' });
-          }
-        console.log(user)      
+          }   
         return user;
         
         });
