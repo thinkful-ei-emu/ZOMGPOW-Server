@@ -67,18 +67,84 @@ response sample:
     }
 ]
 
-
-GET /api/subgoals
-response:
-
 POST /api/subgoals/:student_goal_id 
 response:
 
-GET /api/goals
+DELETE /api/subgoals/subgoal/:subgoal_id
+response: 204
+
+PATCH /api/subgoals/subgoal/:subgoal_id
+response: 204
+
+GET /api/goals/class/:class_id
+response:
+{
+    "goals": [
+        {
+            "id": 2,
+            "class_id": 3,
+            "goal_title": "write a paragraph about your summer",
+            "goal_description": "write a story about the favorite thing you did during the summer",
+            "date_created": "2019-09-20T16:59:08.641Z",
+            "deadline": null,
+            "date_completed": null
+        }
+    ],
+    "subgoals": [
+        {
+            "id": 6,
+            "student_goal_id": 6,
+            "subgoal_title": "create an ideas list",
+            "subgoal_description": "write down some fun things you remember doing during the summer",
+            "date_created": "2019-09-20T16:59:08.641Z",
+            "iscomplete": false,
+            "class_id": 3,
+            "student_id": 11,
+            "goal_id": 1
+        }
+    ]
+}
+
+POST /api/goals/class/:class_id
 response:
 
-POST /api/goals/:class_id/:goal_id
+GET /api/goals/student/:student_id
 expects:
+{
+    "goals": [
+        {
+            "id": 1,
+            "class_id": 4,
+            "goal_title": "write a paragraph about your summer",
+            "goal_description": "write a story about the favorite thing you did during the summer",
+            "date_created": "2019-09-18T21:28:17.067Z",
+            "deadline": null,
+            "date_completed": null,
+            "student_id": 16,
+            "goal_id": 1,
+            "iscomplete": false
+        }
+    ],
+    "subgoals": [
+        {
+            "id": 1,
+            "student_goal_id": 1,
+            "goal_title": "create an ideas list",
+            "goal_description": "write down some fun things you remember doing during the summer",
+            "date_created": "2019-09-18T21:28:17.067Z",
+            "iscomplete": false,
+            "class_id": 4,
+            "student_id": 16,
+            "goal_id": 1
+        }
+    ]
+}
+
+DELETE /api/goals/goal/:goal_id
+expects: 204
+
+PATCH /api/goals/goal/:goal_id
+expects: 204
 
 
 ## Scripts

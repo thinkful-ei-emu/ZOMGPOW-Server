@@ -7,7 +7,7 @@ const jsonParser = express.json();
 const path = require('path');
 
 goalsRouter
-  .all(requireAuth)
+  // .all(requireAuth)
 
 goalsRouter
   .route('/class/:class_id')
@@ -15,7 +15,6 @@ goalsRouter
     try {
     const { class_id } = req.params;
     const goals = await GoalsService.getAllClassGoals(req.app.get('db'), class_id)
-    console.log(goals);
     const subgoals = await SubgoalService.getClassSubGoals(req.app.get('db'), class_id)
     res.status(201).json({goals, subgoals});
     next();
@@ -63,7 +62,7 @@ goalsRouter
   })
 
 goalsRouter
-  .route('/goals/:goal_id')
+  .route('/goal/:goal_id')
   .delete((req, res, next) => {
     const { goal_id } = req.params;
     GoalsService.deleteGoal(
