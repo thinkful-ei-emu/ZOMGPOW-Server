@@ -8,6 +8,11 @@ const authService = {
       .where({email})
       .first();
   },
+  getClassForTeacher(db, teacher_id){
+    return db('classes')
+      .where({teacher_id})
+      .first();
+  },
   comparePasswords(password, hash){
     return bcrypt.compare(password, hash);
   },
