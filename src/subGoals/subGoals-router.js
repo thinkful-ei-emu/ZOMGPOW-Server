@@ -44,6 +44,7 @@ subGoalRouter
   
       res
         .status(201)
+        .location(path.posix.join(req.originalUrl, `/${subGoal.id}`))
         .json({subGoal});
     }
 
@@ -54,7 +55,36 @@ subGoalRouter
 
 subGoalRouter
   .route('/subgoals/:subgoal_id')
-  .delete()
-  .patch()
+  .delete((req, res, next) => {
+    const { subgoal_id } = req.params;
+    GoalsService.deleteGoal(
+      req.app.get('db'),
+      subgoal_id
+    )
+      .then(() => res.status(204).end())
+      .catch(next);
+    })
+  .patch(jsonBodyParser, async (req, res, next) => {
+    const { subgoal_id } = req.params;
+    const { subgoal_title, subgoal_description, iscomplete, date_created } = req.body;
+    const updateSubGoal = { subgoal_title, subgoal_description, iscomplete, date_created };
+    const numberOfValues = Object.values(updateGoal).filter(Boolean).length;
+      if(numberOfValues === 0) {
+        return res.status(400).json({
+          error: {
+            message: 'Request body must contain information fields'
+          }
+        });
+      }
+      subGoalService.updateSubGoal(
+        req.app.get('db'),
+        subgoal_id,
+        updateSubGoal
+      )
+        .then(updated => {
+          res.status(204).end();
+        })
+        .catch(next);
+  });
 
 module.exports = subGoalRouter;

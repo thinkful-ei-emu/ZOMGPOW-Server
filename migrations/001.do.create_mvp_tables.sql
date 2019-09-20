@@ -53,8 +53,8 @@ CREATE TABLE subgoals (
   id SERIAL PRIMARY KEY,
   student_goal_id INTEGER NOT NULL
     REFERENCES student_goals(id) ON DELETE CASCADE NOT NULL,
-  goal_title VARCHAR,
-  goal_description TEXT,
+  subgoal_title VARCHAR,
+  subgoal_description TEXT,
   date_created  TIMESTAMPTZ NOT NULL DEFAULT now(),
   isComplete boolean DEFAULT false
 );
