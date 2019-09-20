@@ -28,7 +28,7 @@ registrationRouter
       );
 
       if (hasTeacherWithEmail)
-        return res.status(400).json({ error: 'Name already taken' });
+        return res.status(400).json({ error: 'Account with this email already exists' });
 
       const hashedPassword = await RegistrationService.hashPassword(password);
 
@@ -43,22 +43,13 @@ registrationRouter
         newUser
       );
 
-      // this is where you would initialize one default class for this user using their full name.
       const firstClass = await RegistrationService.initialTeacherClass(
         req.app.get('db'),
         RegistrationService.formatTeacherForClass(user)
       );
 
-      const serializedClass = RegistrationService.serializeClass(firstClass);
-      const serialedTeacher = RegistrationService.serializeTeacherUser(user)
-
-      res
-        .status(201)
-        .location(path.posix.join(req.originalUrl, `/${user.id}`))
-        .json({
-          user: serialedTeacher,
-          class: serializedClass
-        });
+      return res.status(204).end()
+        
     } catch (error) {
       next(error);
     }
