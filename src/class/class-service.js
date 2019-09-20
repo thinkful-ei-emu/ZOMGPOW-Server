@@ -27,7 +27,7 @@ const ClassService = {
         'students.user_name',
         'goals.goal_title AS goal',
         'student_goals.iscomplete',
-        'subgoals.goal_title As subgoal'
+        'subgoals.subgoal_title As subgoal'
       )
       .where('students.class_id', id);
   },
