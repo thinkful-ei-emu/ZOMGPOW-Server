@@ -10,7 +10,7 @@ classRouter
   .route('/')
   .all(requireAuth)
   .get((req, res, next) => {
-    console.log(req.user)
+    console.log(req.user);
     ClassService.getClasses(req.app.get('db'), req.user.id)
       .then(classes => {
         console.log(classes);
@@ -52,10 +52,10 @@ classRouter
       .then(singleClass => {
         if (!singleClass) {
           return res.status(404).json({
-            error: { message: `Class not found` }
+            error: { message: 'Class not found' }
           });
         }
-        console.log(res.singleClass)
+        console.log(res.singleClass);
         res.singleClass = singleClass;
 
         next();
@@ -76,7 +76,7 @@ classRouter
       .then(singleClass => {
         if (!singleClass) {
           return res.status(404).json({
-            error: { message: `Class not found` }
+            error: { message: 'Class not found' }
           });
         }
       

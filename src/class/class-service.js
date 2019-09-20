@@ -29,7 +29,7 @@ const ClassService = {
         'student_goals.iscomplete',     
         'subgoals.goal_title As subgoal'
       )
-      .where('students.class_id', id)      
+      .where('students.class_id', id);      
   },
   insertClass(knex, newClass) {
     return knex
