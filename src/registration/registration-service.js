@@ -16,6 +16,33 @@ const RegistrationService = {
       .returning('*')
       .then(([user]) => user);
   },
+  formatTeacherForClass(teacher){
+    const class_title = `${teacher.full_name}'s class`;
+
+    const classcode = Math.floor(Math.random() * Math.floor(999999));
+
+    const teacher_id = teacher.id;
+
+    return {
+      class_title,
+      classcode,
+      teacher_id
+    };
+  },
+  initialTeacherClass(db, classInfo){
+    return db('classes')
+      .insert(classInfo)
+      .returning('*')
+      .then(([newClass]) => newClass);
+  },
+  serializeClass(newClass){
+    return {
+      id: newClass.id,
+      class_title: newClass.class_title,
+      teacher_id: newClass.teacher_id,
+      date_created: newClass.date_created
+    };
+  },
   insertStudentUser(db, newUser){
     return db
       .insert(newUser)
