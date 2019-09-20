@@ -13,6 +13,11 @@ const authService = {
       .where({teacher_id})
       .first();
   },
+  getStudentWithUsername(db,user_name){
+    return db('students')
+      .where({user_name})
+      .first();
+  },
   comparePasswords(password, hash){
     return bcrypt.compare(password, hash);
   },
