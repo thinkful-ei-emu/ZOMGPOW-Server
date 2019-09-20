@@ -27,7 +27,7 @@ authRouter
             const payload = { user_id: user.id };
 
             return AuthService.getClassForTeacher(
-              req.app.get('db'),
+              req.app.get('db'), 
               user.id
             )
               .then(teachersClass => {

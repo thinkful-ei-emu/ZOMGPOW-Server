@@ -61,7 +61,7 @@ TRUNCATE
   (2,7,1),
   (2,5,1);
   
-  INSERT INTO subgoals (student_goal_id, goal_title, goal_description)
+  INSERT INTO subgoals (student_goal_id, subgoal_title, subgoal_description)
   VALUES
   (1, 'create an ideas list', 'write down some fun things you remember doing during the summer'),
   (4, 'create an ideas list', 'write down some fun things you remember doing during the summer'),
