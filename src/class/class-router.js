@@ -3,6 +3,8 @@ const xss = require('xss');
 const classRouter = express.Router();
 const bodyParser = express.json();
 const ClassService = require('./class-service');
+const GoalsService = require('../goals/goals-service');
+const SubgoalService = require('../subGoals/subGoal-service');
 const { requireAuth } = require('../middleware/jwt-auth');
 
 
@@ -86,8 +88,18 @@ classRouter
       })
       .catch(next);
   })
-  .get((req, res, next) => {
-    res.json(res.singleClass);
+  .get(async (req, res, next) => {
+    try {
+      const { class_id } = req.params;
+      const students = res.singleClass;
+      const goals = await GoalsService.getAllClassGoals(req.app.get('db'), class_id)
+      const subgoals = await SubgoalService.getClassSubGoals(req.app.get('db'), class_id)
+      res.status(201).json({students, goals, subgoals});
+      next();
+      }
+      catch(error) {
+        next(error)
+      }
   });
 
 module.exports = classRouter;
