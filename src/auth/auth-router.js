@@ -25,10 +25,27 @@ authRouter
             }
             const sub = loginUser.email;
             const payload = { user_id: user.id };
-            res.send({
-              email: user.email,
-              authToken: AuthService.createJWT(sub, payload),
-            });
+
+            return AuthService.getClassForTeacher(
+              req.app.get('db'),
+              user.id
+            )
+              .then(teachersClass => {
+
+                const serializedUser = {
+                  id: user.id,
+                  full_name: user.full_name,
+                  email: user.email,
+                  date_created: user.date_created,
+                  date_modified: user.date_modified
+                };
+
+                res.send({
+                  user: serializedUser,
+                  class: teachersClass,
+                  authToken: AuthService.createJWT(sub, payload),
+                });
+              });
           });
       })
       .catch(next);
