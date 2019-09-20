@@ -43,10 +43,22 @@ registrationRouter
         newUser
       );
 
+      // this is where you would initialize one default class for this user using their full name.
+      const firstClass = await RegistrationService.initialTeacherClass(
+        req.app.get('db'),
+        RegistrationService.formatTeacherForClass(user)
+      );
+
+      const serializedClass = RegistrationService.serializeClass(firstClass);
+      const serialedTeacher = RegistrationService.serializeTeacherUser(user)
+
       res
         .status(201)
         .location(path.posix.join(req.originalUrl, `/${user.id}`))
-        .json(RegistrationService.serializeTeacherUser(user));
+        .json({
+          user: serialedTeacher,
+          class: serializedClass
+        });
     } catch (error) {
       next(error);
     }
