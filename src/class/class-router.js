@@ -71,7 +71,7 @@ classRouter
 
 classRouter
   .route('/:class_id/students')
-  // .all(requireAuth)
+  .all(requireAuth)
   .all((req, res, next) => {
     const { class_id } = req.params;
     ClassService.getStudentsByClassId(req.app.get('db'), class_id)
