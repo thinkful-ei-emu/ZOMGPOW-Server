@@ -8,7 +8,7 @@ const jsonBodyParser = express.json();
 
 subGoalRouter
   .post('/:student_goal_id', requireAuth, jsonBodyParser, async(req, res, next) => {
-    const { goal_title, goal_description } = req.body
+    let { subgoal_title, subgoal_description } = req.body
 
     const { student_goal_id } = req.params
 
@@ -18,7 +18,7 @@ subGoalRouter
       });
     }
     if(!goal_description){
-      goal_description = null;
+      subgoal_description = null;
     }
 
     try {
@@ -33,8 +33,8 @@ subGoalRouter
 
       const newSubGoal = {
         student_goal_id,
-        goal_title,
-        goal_description
+        subgoal_title,
+        subgoal_description
       };
   
       const subGoal = await subGoalService.insertSubGoal(
