@@ -96,6 +96,24 @@ classRouter
       catch(error) {
         next(error)
       }
+  })
+  .delete( bodyParser, (req, res, next) => {
+      
+      const {user_name} = req.body
+
+      // accepts class_id but doens't utilize it, may need to upon refactor
+      const {class_id} = req.params
+
+
+
+      ClassService.deleteStudent(
+        req.app.get('db'),
+         user_name
+         ).then(() => {
+          res.status(204).send()
+         })
+         .catch(next)
   });
+  
 
 module.exports = classRouter;
