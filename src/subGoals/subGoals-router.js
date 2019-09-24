@@ -12,12 +12,12 @@ subGoalRouter
 
     const { student_goal_id } = req.params
 
-    if(!goal_title){
+    if(!subgoal_title){
       return res.status(400).json({
         error: "Missing 'title' in request body"
       });
     }
-    if(!goal_description){
+    if(!subgoal_description){
       subgoal_description = null;
     }
 
