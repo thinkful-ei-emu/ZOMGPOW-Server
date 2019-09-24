@@ -8,16 +8,17 @@ const jsonBodyParser = express.json();
 
 subGoalRouter
   .post('/:student_goal_id', requireAuth, jsonBodyParser, async(req, res, next) => {
-    const { goal_title, goal_description } = req.body
+    let { subgoal_title, subgoal_description } = req.body
+
     const { student_goal_id } = req.params
 
-    if(!goal_title){
+    if(!subgoal_title){
       return res.status(400).json({
         error: "Missing 'title' in request body"
       });
     }
-    if(!goal_description){
-      goal_description = null;
+    if(!subgoal_description){
+      subgoal_description = null;
     }
     try {
       const isValidStudentGoal = await subGoalService.verifyStudentGoal(
@@ -29,8 +30,8 @@ subGoalRouter
       }
       const newSubGoal = {
         student_goal_id,
-        goal_title,
-        goal_description
+        subgoal_title,
+        subgoal_description
       };
       const subGoal = await subGoalService.insertSubGoal(
         req.app.get('db'),

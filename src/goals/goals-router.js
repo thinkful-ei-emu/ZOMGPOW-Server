@@ -46,7 +46,7 @@ goalsRouter
     }
   });
 
-  goalsRouter
+goalsRouter
   .route('/student/:student_id')
   .get(async (req, res, next) => {
     try {
@@ -62,6 +62,30 @@ goalsRouter
   })
 
 goalsRouter
+  .route('/student/goal/:id')
+  .patch(jsonParser, async (req, res, next) => {
+    const { id } = req.params;
+    const { iscomplete } = req.body;
+    const updateGoal = { iscomplete };
+      if(iscomplete === undefined) {
+        return res.status(400).json({
+          error: {
+            message: 'Request body must contain information fields'
+          }
+        });
+      }
+      GoalsService.updateStudentGoal(
+        req.app.get('db'),
+        id,
+        updateGoal
+      )
+        .then(updated => {
+          res.status(204).end();
+        })
+        .catch(next);
+  });
+
+goalsRouter
   .route('/goal/:goal_id')
   .delete((req, res, next) => {
     const { goal_id } = req.params;
@@ -74,8 +98,8 @@ goalsRouter
   })
   .patch(jsonParser, async (req, res, next) => {
     const { goal_id } = req.params;
-    const { goal_title, goal_description, deadline, date_created } = req.body;
-    const updateGoal = { goal_title, goal_description, deadline, date_created };
+    const { goal_title, goal_description, deadline, date_completed } = req.body;
+    const updateGoal = { goal_title, goal_description, deadline, date_completed };
     const numberOfValues = Object.values(updateGoal).filter(Boolean).length;
       if(numberOfValues === 0) {
         return res.status(400).json({

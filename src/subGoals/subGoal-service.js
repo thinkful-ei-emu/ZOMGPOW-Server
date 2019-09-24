@@ -27,7 +27,7 @@ const subGoalService ={
   },
   verifyStudentGoal(db, id){
     return db('student_goals')
-      .where('student_goal_id', id)
+      .where({ id })
       .first();
   },
   deleteSubGoal(db, id) {
