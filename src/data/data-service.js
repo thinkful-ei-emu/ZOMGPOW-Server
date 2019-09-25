@@ -7,15 +7,25 @@ const dataService = {
     return db('goals')
       .select('id', 'goal_title', 'date_created', 'date_completed')
       .whereNotNull('date_completed')
-      .andWhere({ class_id })
-    // .where('class_id', class_id);
+      .andWhere({ class_id });
+ 
 
   },
 
-  getStudents(db, class_id) {
-    return db('students')
-      .count('*')
-      .where({class_id});
+  getCompleted(db, class_id) {
+    return db('student_goals')
+      .select('goal_id As id')
+      .groupBy('goal_id')
+      .count('* As completed')
+      .where({ 'class_id': class_id, 'iscomplete': true })
+
+  },
+  getTotalStudents(db, class_id) {
+    return db('student_goals')
+      .select('goal_id As id')
+      .groupBy('goal_id')
+      .count('* As total_students')
+      .where({ 'class_id': class_id,});
   }
 
 
