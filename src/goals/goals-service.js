@@ -25,11 +25,17 @@ const GoalsService = {
         'goals.date_completed',
         'student_goals.id AS sg_id',
         'student_goals.student_id',
-        'student_goals.iscomplete'
+        'student_goals.iscomplete',
+        'student_goals.evaluation'
       )
       .join('student_goals', 'student_goals.goal_id', 'goals.id')
       .where({ student_id })
       .groupBy('goals.id', 'student_goals.id');
+  },
+  getStudentGoalsTable(db, class_id) {
+    return db('student_goals')
+      .select('*')
+      .where({ class_id })
   },
   insertGoal(db, newGoal){
     return db('goals')
