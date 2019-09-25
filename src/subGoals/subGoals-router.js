@@ -20,34 +20,28 @@ subGoalRouter
     if(!subgoal_description){
       subgoal_description = null;
     }
-
     try {
       const isValidStudentGoal = await subGoalService.verifyStudentGoal(
         req.app.get('db'),
         student_goal_id
       );
-  
       if(!isValidStudentGoal){
         return res.status(404).json({error: 'Student goal not found'})
       }
-
       const newSubGoal = {
         student_goal_id,
         subgoal_title,
         subgoal_description
       };
-  
       const subGoal = await subGoalService.insertSubGoal(
         req.app.get('db'),
         newSubGoal
       );
-  
       res
         .status(201)
         .location(path.posix.join(req.originalUrl, `/${subGoal.id}`))
         .json({subGoal});
     }
-
     catch(error){
       next(error)
     }

@@ -26,8 +26,24 @@ goalsRouter
   .post(jsonParser, async (req, res, next) => {
     try{
     const { class_id } = req.params;
-    const { goal_title, goal_description, deadline } = req.body;
-    const newGoal = { class_id, goal_title, goal_description };
+    const {
+      goal_title, 
+      goal_description, 
+      deadline, 
+      exit_ticket_type,
+      exit_ticket_question,
+      exit_ticket_options,
+      exit_ticket_correct_answer
+    } = req.body;
+    const newGoal = {
+      class_id, 
+      goal_title, 
+      goal_description,
+      exit_ticket_type,
+      exit_ticket_question,
+      exit_ticket_options,
+      exit_ticket_correct_answer
+    };
     for (const [key, value] of Object.entries(newGoal))
       if(value === null)
         return res.status(401).json({
