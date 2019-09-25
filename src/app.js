@@ -9,6 +9,7 @@ const authRouter = require('./auth/auth-router');
 const classRouter = require('./class/class-router');
 const subGoalRouter = require('./subGoals/subGoals-router');
 const goalsRouter = require('./goals/goals-router');
+const dataRouter = require('./data/data-router');
 
 const app = express();
 
@@ -24,6 +25,7 @@ app.use('/api/auth', authRouter);
 app.use('/api/class', classRouter);
 app.use('/api/subgoals', subGoalRouter);
 app.use('/api/goals', goalsRouter);
+app.use('/api/data', dataRouter);
 
 
 // eslint-disable-next-line no-unused-vars
