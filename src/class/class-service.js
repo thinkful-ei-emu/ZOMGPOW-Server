@@ -21,6 +21,11 @@ const ClassService = {
       .select('*')
       .where('students.class_id', id);
   },
+  deleteStudent(db, user_name){
+    return db('students')
+      .where({user_name})
+      .del();
+  },
   insertClass(knex, newClass) {
     return knex
       .insert(newClass)

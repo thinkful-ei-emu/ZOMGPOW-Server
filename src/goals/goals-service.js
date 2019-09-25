@@ -32,6 +32,11 @@ const GoalsService = {
       .where({ student_id })
       .groupBy('goals.id', 'student_goals.id');
   },
+  getStudentGoalsTable(db, class_id) {
+    return db('student_goals')
+      .select('*')
+      .where({ class_id })
+  },
   insertGoal(db, newGoal){
     return db('goals')
       .insert(newGoal)

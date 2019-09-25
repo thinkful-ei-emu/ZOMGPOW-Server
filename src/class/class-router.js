@@ -67,7 +67,7 @@ classRouter
 
 classRouter
   .route('/:class_id/students')
-  .all(requireAuth)
+  // .all(requireAuth)
   .all((req, res, next) => {
     const { class_id } = req.params;
     ClassService.getStudentsByClassId(req.app.get('db'), class_id)
@@ -90,12 +90,31 @@ classRouter
       const students = res.singleClass;
       const goals = await GoalsService.getAllClassGoals(req.app.get('db'), class_id)
       const subgoals = await SubgoalService.getClassSubGoals(req.app.get('db'), class_id)
-      res.status(201).json({students, goals, subgoals});
+      const studentGoals = await GoalsService.getStudentGoalsTable(req.app.get('db'), class_id);
+      res.status(201).json({students, goals, studentGoals, subgoals});
       next();
       }
       catch(error) {
         next(error)
       }
+  })
+  .delete( bodyParser, (req, res, next) => {
+      
+      const {user_name} = req.body
+
+      // accepts class_id but doens't utilize it, may need to upon refactor
+      const {class_id} = req.params
+
+
+
+      ClassService.deleteStudent(
+        req.app.get('db'),
+         user_name
+         ).then(() => {
+          res.status(204).send()
+         })
+         .catch(next)
   });
+  
 
 module.exports = classRouter;
