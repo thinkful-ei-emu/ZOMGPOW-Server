@@ -11,6 +11,7 @@ subGoalRouter
     let { subgoal_title, subgoal_description } = req.body
 
     const { student_goal_id } = req.params
+    console.log(student_goal_id);
 
     if(!subgoal_title){
       return res.status(400).json({
