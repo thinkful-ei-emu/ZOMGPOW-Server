@@ -22,7 +22,7 @@ dataRouter
       const completed = await dataService.getCompleted(req.app.get('db'), classId)
       const totalStudents = await dataService.getTotalStudents(req.app.get('db'), classId)     
       let time;     
-      let dateArr = []
+      let dataArr = []
     
       for (let i = 0; i < dates.length; i++) {
         let createdHours = Number(dates[i]["date_created"].getHours())
@@ -41,23 +41,23 @@ dataRouter
           mins = `0${mins}`
         }
         time = `${hours}h ${mins}m`
-        dateArr.push({ id: dates[i]["id"], goal_title: dates[i]["goal_title"], time: time, })
+        dataArr.push({ id: dates[i]["id"], goal_title: dates[i]["goal_title"], time: time, })
       }
 
-      for(let i=0; i<dateArr.length; i++){    
+      for(let i=0; i<dataArr.length; i++){    
         for(let j=0; j<completed.length; j++){
-          if(completed[j].id === dateArr[i].id){
-            dateArr[i]["total_completed"] = completed[j]["completed"]
-            dateArr[i]["total_students"] = totalStudents[j]["total_students"]
-            dateArr[i]["avg_completed"] = `${Math.ceil(Number(completed[j]["completed"])/Number(totalStudents[j]["total_students"]) * 100)}%`
+          if(completed[j].id === dataArr[i].id){
+            dataArr[i]["total_completed"] = completed[j]["completed"]
+            dataArr[i]["total_students"] = totalStudents[j]["total_students"]
+            dataArr[i]["avg_completed"] = `${Math.ceil(Number(completed[j]["completed"])/Number(totalStudents[j]["total_students"]) * 100)}%`
                     
           }
         }
       }  
       
-      console.log(dateArr);
+      console.log(dataArr);
 
-      res.status(200).json({ dateArr })
+      res.status(200).json({ dataArr })
     }
     catch (e) {
       next(e)
