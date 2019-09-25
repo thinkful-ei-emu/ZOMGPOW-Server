@@ -1,2 +1,5 @@
 ALTER TABLE student_goals 
-  DROP COLUMN feedback
+  DROP COLUMN evaluation;
+
+ALTER TABLE subgoals
+  DROP COLUMN evaluation;
