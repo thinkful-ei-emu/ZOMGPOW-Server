@@ -69,6 +69,7 @@ goalsRouter
     const { student_id } = req.params;
     const goals = await GoalsService.getStudentGoals(req.app.get('db'), student_id)
     const subgoals = await SubgoalService.getStudentSubGoals(req.app.get('db'), student_id)
+    console.log(goals)
     res.status(201).json({goals, subgoals});
     next();
     }
@@ -81,6 +82,7 @@ goalsRouter
   .route('/student/goal/:id')
   .patch(jsonParser, async (req, res, next) => {
     const { id } = req.params;
+    console.log(req.body);
     const { iscomplete } = req.body;
     const updateGoal = { iscomplete };
       if(iscomplete === undefined) {
@@ -96,7 +98,8 @@ goalsRouter
         updateGoal
       )
         .then(updated => {
-          res.status(204).end();
+          console.log(updated)
+          res.status(204).send();
         })
         .catch(next);
   });
