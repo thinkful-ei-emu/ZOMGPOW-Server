@@ -151,6 +151,12 @@ expects: 204
 PATCH /api/goals/goal/:goal_id
 expects: 204
 
+PATCH /api/studentgoals/learning_target/:class_id/:student_id/:goal_id
+and 
+PATCH /api/studentgoals/subgoal/:subgoal_id
+response:204
+    -Used to update subgoals and student_goals to reflect student self-evaluation
+
 
 ## Scripts
 
