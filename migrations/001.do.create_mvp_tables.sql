@@ -47,7 +47,6 @@ CREATE TABLE student_goals (
   goal_id INTEGER NOT NULL
     REFERENCES goals(id) ON DELETE CASCADE NOT NULL,
   isComplete boolean DEFAULT false,
-  evaluation INTEGER DEFAULT 0
 );
 
 CREATE TABLE subgoals (
