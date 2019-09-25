@@ -49,20 +49,25 @@ subGoalRouter
 
 subGoalRouter
   .route('/subgoal/:subgoal_id')
-  .delete((req, res, next) => {
-    const { subgoal_id } = req.params;
-    GoalsService.deleteGoal(
-      req.app.get('db'),
-      subgoal_id
-    )
-      .then(() => res.status(204).end())
-      .catch(next);
-    })
+  .delete(async (req, res, next) => {
+    try{
+      const { subgoal_id } = req.params;
+      await GoalsService.deleteGoal(
+        req.app.get('db'),
+        subgoal_id
+      )
+      res.status(204).end()
+    }
+    catch(error) {
+      next(error)
+    }
+  })
   .patch(jsonBodyParser, async (req, res, next) => {
-    const { subgoal_id } = req.params;
-    const { subgoal_title, subgoal_description, iscomplete, date_created } = req.body;
-    const updateSubGoal = { subgoal_title, subgoal_description, iscomplete, date_created };
-    const numberOfValues = Object.values(updateGoal).filter(Boolean).length;
+    try {
+      const { subgoal_id } = req.params;
+      const { subgoal_title, subgoal_description, iscomplete, date_created } = req.body;
+      const updateSubGoal = { subgoal_title, subgoal_description, iscomplete, date_created };
+      const numberOfValues = Object.values(updateGoal).filter(Boolean).length;
       if(numberOfValues === 0) {
         return res.status(400).json({
           error: {
@@ -70,15 +75,16 @@ subGoalRouter
           }
         });
       }
-      subGoalService.updateSubGoal(
+      await subGoalService.updateSubGoal(
         req.app.get('db'),
         subgoal_id,
         updateSubGoal
       )
-        .then(updated => {
-          res.status(204).end();
-        })
-        .catch(next);
+      res.status(204).end();
+    }
+    catch(error) {
+      next(error)
+    }
   });
 
 module.exports = subGoalRouter;

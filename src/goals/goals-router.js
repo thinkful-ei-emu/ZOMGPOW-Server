@@ -7,7 +7,7 @@ const jsonParser = express.json();
 const path = require('path');
 
 goalsRouter
-  // .all(requireAuth)
+  .all(requireAuth)
 
 goalsRouter
   .route('/class/:class_id')
@@ -28,7 +28,7 @@ goalsRouter
     const { class_id } = req.params;
     const {
       goal_title, 
-      goal_description, 
+      goal_description,
       deadline, 
       exit_ticket_type,
       exit_ticket_question,
@@ -39,6 +39,7 @@ goalsRouter
       class_id, 
       goal_title, 
       goal_description,
+      deadline,
       exit_ticket_type,
       exit_ticket_question,
       exit_ticket_options,
@@ -81,10 +82,11 @@ goalsRouter
 goalsRouter
   .route('/student/goal/:id')
   .patch(jsonParser, async (req, res, next) => {
-    const { id } = req.params;
-    console.log(req.body);
-    const { iscomplete } = req.body;
-    const updateGoal = { iscomplete };
+    try{
+      const { id } = req.params;
+      console.log(req.body);
+      const { iscomplete } = req.body;
+      const updateGoal = { iscomplete };
       if(iscomplete === undefined) {
         return res.status(400).json({
           error: {
@@ -92,34 +94,39 @@ goalsRouter
           }
         });
       }
-      GoalsService.updateStudentGoal(
+      await GoalsService.updateStudentGoal(
         req.app.get('db'),
         id,
         updateGoal
       )
-        .then(updated => {
-          console.log(updated)
-          res.status(204).send();
-        })
-        .catch(next);
+      res.status(204).send();
+    }
+    catch(error) {
+      next(error)
+    }
   });
 
 goalsRouter
   .route('/goal/:goal_id')
-  .delete((req, res, next) => {
-    const { goal_id } = req.params;
-    GoalsService.deleteGoal(
-      req.app.get('db'),
-      goal_id
-    )
-      .then(() => res.status(204).end())
-      .catch(next);
+  .delete(async (req, res, next) => {
+    try {
+      const { goal_id } = req.params;
+      await GoalsService.deleteGoal(
+        req.app.get('db'),
+        goal_id
+      )
+      res.status(204).end()
+    }
+    catch(error) {
+      next(error)
+    }
   })
   .patch(jsonParser, async (req, res, next) => {
-    const { goal_id } = req.params;
-    const { goal_title, goal_description, deadline, date_completed } = req.body;
-    const updateGoal = { goal_title, goal_description, deadline, date_completed };
-    const numberOfValues = Object.values(updateGoal).filter(Boolean).length;
+    try {
+      const { goal_id } = req.params;
+      const { goal_title, goal_description, deadline, date_completed } = req.body;
+      const updateGoal = { goal_title, goal_description, deadline, date_completed };
+      const numberOfValues = Object.values(updateGoal).filter(Boolean).length;
       if(numberOfValues === 0) {
         return res.status(400).json({
           error: {
@@ -127,15 +134,16 @@ goalsRouter
           }
         });
       }
-      GoalsService.updateGoal(
+      await GoalsService.updateGoal(
         req.app.get('db'),
         goal_id,
         updateGoal
       )
-        .then(updated => {
-          res.status(204).end();
-        })
-        .catch(next);
+      res.status(204).end();
+      }
+      catch(error) {
+        next(error)
+      }
   });
 
 
