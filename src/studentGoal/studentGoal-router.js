@@ -1,28 +1,57 @@
 const express = require('express');
-const {requireAuth} = require('../middleware/jwt-auth');
-
-
+const studentService = require('./studentGoal-service');
+//add requireAuth
 const studentGoalRouter = express.Router();
-const jsonBodyParser = express.json();
-
-//update studnet_goal table change evaluation column for specific studnet and specific goal
-//requires using the class_id and student_id 
-
-//need to add eval column to student_goals table and subgoals table 
-
-//sub_goals have a student_goal_id that connects a subgoal to a student and a learning target
-//student_goals have 
-
+const jsonParser = express.json();
 
 studentGoalRouter
-  .patch('/learning_target/:goal_id/:student_id', requireAuth, jsonBodyParser, async(req, res, next) => {
-    let { evaluation } = req.body;
-
+  .route('/learning_target/:class_id/:student_id/:goal_id')
+  .patch(jsonParser, async (req, res, next) => {
+    const { class_id, student_id, goal_id } = req.params
+    const { evaluation } = req.body;
+    const updatedLearningTarget = { evaluation };
+    if(evaluation === undefined){
+      return res.status(400).json({
+        error:{
+          message: 'Request body must contain an evaluation score'
+        }
+      });
+    }
+    studentService.updateLearningTarget(
+      req.app.get('db'),
+      class_id,
+      student_id,
+      goal_id,
+      updatedLearningTarget
+    )
+    .then(updated => {
+      res.status(204).end();
+    })
+    .catch(next);
   });
 
 studentGoalRouter
-  .patch('/subgoal/:student_goal_id', requireAuth, jsonBodyParser, async(req, res, next) => {
-    let { evaluation } = req.body;
+  .route('/subgoal/:subgoal_id')
+  .patch(jsonParser, async (req, res, next) => {
+    const { subgoal_id } = req.params;
+    const { evaluation } = req.body;
+    const updatedSubGoal= { evaluation }
+    if(evaluation === undefined){
+      return res.status(400).json({
+        error:{
+          message: 'Request body must contain an evaluation score'
+        }
+      });
+    }
+    studentService.updateSubGoal(
+      req.app.get('db'),
+      subgoal_id,
+      updatedSubGoal
+    )
+    .then(updated => {
+      res.status(204).end();
+    })
+    .catch(next);
   });
 
 module.exports = studentGoalRouter;

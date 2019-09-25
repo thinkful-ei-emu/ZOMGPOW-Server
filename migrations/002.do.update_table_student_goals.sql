@@ -1,2 +1,5 @@
 ALTER TABLE student_goals 
-  ADD feedback int CHECK (feedback >= 1 and feedback <= 3)
+  ADD evaluation int CHECK (evaluation >= 1 and evaluation <= 3);
+
+ALTER TABLE subgoals 
+  ADD evaluation int CHECK (evaluation >= 1 and evaluation <=3);

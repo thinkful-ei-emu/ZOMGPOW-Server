@@ -25,7 +25,7 @@ app.use('/api/auth', authRouter);
 app.use('/api/class', classRouter);
 app.use('/api/subgoals', subGoalRouter);
 app.use('/api/goals', goalsRouter);
-app.use('/api/studentGoals', studentGoalRouter);
+app.use('/api/studentgoals', studentGoalRouter);
 
 
 // eslint-disable-next-line no-unused-vars
