@@ -79,32 +79,6 @@ goalsRouter
   });
 
 goalsRouter
-  .route('/student/goal/:id')
-  .patch(jsonParser, async (req, res, next) => {
-    try{
-      const { id } = req.params;
-      const { iscomplete } = req.body;
-      const updateGoal = { iscomplete };
-      if(iscomplete === undefined) {
-        return res.status(400).json({
-          error: {
-            message: 'Request body must contain information fields'
-          }
-        });
-      }
-      await GoalsService.updateStudentGoal(
-        req.app.get('db'),
-        id,
-        updateGoal
-      );
-      res.status(204).send();
-    }
-    catch(error) {
-      next(error);
-    }
-  });
-
-goalsRouter
   .route('/goal/:goal_id')
   .delete(async (req, res, next) => {
     try {
