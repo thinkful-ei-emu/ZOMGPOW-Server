@@ -111,7 +111,7 @@ describe('Auth Endpoints', function () {
         password: testUser.password,
       };
       const expectedToken = jwt.sign(
-        { user_id: testUser.id },
+        { user_id: testUser.id, user_email: testUser.email },
         process.env.JWT_SECRET,
         {
           subject: testUser.email,
@@ -120,15 +120,10 @@ describe('Auth Endpoints', function () {
         }
       );
       return supertest(app)
-        .post('/api/auth/teacher/login')
-        .send(userValidCreds)
-        .expect(200)
-        .expect(res => {
-          expect(res.body.user).to.have.property('id');
-          expect(res.body.user.email).to.eql(testUser.email);
-          expect(res.body.user.full_name).to.eql(testUser.full_name);
-          expect(res.body.user.date_modified).to.eql(null);
-          expect(res.body.authToken).to.eql(expectedToken);
+        .put('/api/auth/teacher/login')
+        .set('Authorization', helpers.makeAuthHeader(testUser))
+        .expect(200, {
+          authToken: expectedToken,
         });
         
     });
