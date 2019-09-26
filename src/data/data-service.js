@@ -17,7 +17,7 @@ const dataService = {
       .select('goal_id As id')
       .groupBy('goal_id')
       .count('* As completed')
-      .where({ 'class_id': class_id, 'iscomplete': true })
+      .where({ 'class_id': class_id, 'iscomplete': true });
 
   },
   getTotalStudents(db, class_id) {
