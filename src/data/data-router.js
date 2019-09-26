@@ -20,7 +20,8 @@ dataRouter
 
       const dates = await dataService.getTimeForGoal(req.app.get('db'), classId) 
       const completed = await dataService.getCompleted(req.app.get('db'), classId)
-      const totalStudents = await dataService.getTotalStudents(req.app.get('db'), classId)     
+      const totalStudents = await dataService.getTotalStudents(req.app.get('db'), classId)
+   
       let time;     
       let dataArr = []
     
@@ -41,7 +42,7 @@ dataRouter
           mins = `0${mins}`
         }
         time = `${hours}h ${mins}m`
-        dataArr.push({ id: dates[i]["id"], goal_title: dates[i]["goal_title"], time: time, })
+        dataArr.push({ id: dates[i]["id"], goal_title: dates[i]["goal_title"], time: time, question_type: dates[i]["question_type"], question: dates[i]["question"], options: dates[i]["options"], answer:dates[i]["answer"]})
       }
 
       for(let i=0; i<dataArr.length; i++){    
@@ -50,7 +51,10 @@ dataRouter
             dataArr[i]["total_completed"] = completed[j]["completed"]
             dataArr[i]["total_students"] = totalStudents[j]["total_students"]
             dataArr[i]["avg_completed"] = `${Math.ceil(Number(completed[j]["completed"])/Number(totalStudents[j]["total_students"]) * 100)}%`
-                    
+            dataArr[i]["eval_total"] = totalStudents[j]["eval_total"]  
+            dataArr[i]["eval_avg"] = Number(totalStudents[j]["eval_avg"]).toFixed(2); 
+            dataArr[i]["eval_percentage"] = `${(((Number(totalStudents[j]["eval_avg"])) /3 ) * 100).toFixed(0)}%`; 
+
           }
         }
       }  
@@ -58,6 +62,19 @@ dataRouter
       console.log(dataArr);
 
       res.status(200).json({ dataArr })
+    }
+    catch (e) {
+      next(e)
+    }
+  })
+  .get('/:classId/:goalId', requireAuth, async (req, res, next) => {
+
+    const { classId, goalId } = req.params
+
+    try{
+      const studentResponses = await dataService.getStudentResponses(req.app.get('db'), classId, goalId) 
+      console.log('student response:', studentResponses)  
+      res.status(200).json({studentResponses })
     }
     catch (e) {
       next(e)
