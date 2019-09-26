@@ -50,23 +50,23 @@ describe('Auth Endpoints', function () {
       });
     });
 
-    it(`responds 400 'invalid email or password' when bad email`, () => {
-      const userInvalidUser = { email: 'user-not', password: 'existy' }
+    it('responds 400 \'invalid email or password\' when bad email', () => {
+      const userInvalidUser = { email: 'user-not', password: 'existy' };
       return supertest(app)
         .post('/api/auth/teacher/login')
         .send(userInvalidUser)
-        .expect(400, { error: `Incorrect email or password` })
+        .expect(400, { error: 'Incorrect email or password' });
     });
 
-    it(`responds 400 'invalid username or password' when bad password`, () => {
-      const userInvalidPass = { email: testUser.email, password: 'incorrect' }
+    it('responds 400 \'invalid username or password\' when bad password', () => {
+      const userInvalidPass = { email: testUser.email, password: 'incorrect' };
       return supertest(app)
         .post('/api/auth/teacher/login')
         .send(userInvalidPass)
-        .expect(400, { error: `Incorrect email or password` })
+        .expect(400, { error: 'Incorrect email or password' });
     });
 
-    it(`responds 200 and JWT auth token using secret when valid credentials`, () => {
+    it('responds 200 and JWT auth token using secret when valid credentials', () => {
       const userValidCreds = {
         email: testUser.email,
         password: testUser.password,
@@ -85,19 +85,19 @@ describe('Auth Endpoints', function () {
         .send(userValidCreds)
         .expect(200)
         .expect(res => {
-            expect(res.body.user).to.have.property('id')
-            expect(res.body.user.email).to.eql(testUser.email)
-            expect(res.body.user.full_name).to.eql(testUser.full_name)
-            expect(res.body.user.date_modified).to.eql(null)
-            expect(res.body.user.authToken).to.eql(testUser.authToken)
-        })
+          expect(res.body.user).to.have.property('id');
+          expect(res.body.user.email).to.eql(testUser.email);
+          expect(res.body.user.full_name).to.eql(testUser.full_name);
+          expect(res.body.user.date_modified).to.eql(null);
+          expect(res.body.user.authToken).to.eql(testUser.authToken);
+        });
     });
   });
 
   /**
    * @description Refresh token
    **/
-  describe(`PATCH /api/auth/teacher/login`, () => {
+  describe('PATCH /api/auth/teacher/login', () => {
     beforeEach('insert users', () =>
       helpers.seedUsers(
         db,
@@ -105,27 +105,32 @@ describe('Auth Endpoints', function () {
       )
     );
 
-    //  it.only(`responds 200 and JWT auth token using secret`, () => {
-    //     const userValidCreds = {
-    //         email: testUser.email,
-    //         password: testUser.password,
-    //       };
-    //     const expectedToken = jwt.sign(
-    //     { user_id: testUser.id, name: testUser.name },
-    //     process.env.JWT_SECRET,
-    //     {
-    //       subject: testUser.email,
-    //       //expiresIn: process.env.JWT_EXPIRY,
-    //       algorithm: 'HS256',
-    //     }
-    //   );
-    //   return supertest(app)
-    //   .put('/api/auth/teacher/login')
-    //   .set('Authorization', helpers.makeAuthHeader(testUser))
-    //   .expect(200, {
-    //     authToken: expectedToken,
-    //   });
+    it.only('responds 200 and JWT auth token using secret', () => {
+      const userValidCreds = {
+        email: testUser.email,
+        password: testUser.password,
+      };
+      const expectedToken = jwt.sign(
+        { user_id: testUser.id },
+        process.env.JWT_SECRET,
+        {
+          subject: testUser.email,
+          //expiresIn: process.env.JWT_EXPIRY,
+          algorithm: 'HS256',
+        }
+      );
+      return supertest(app)
+        .post('/api/auth/teacher/login')
+        .send(userValidCreds)
+        .expect(200)
+        .expect(res => {
+          expect(res.body.user).to.have.property('id');
+          expect(res.body.user.email).to.eql(testUser.email);
+          expect(res.body.user.full_name).to.eql(testUser.full_name);
+          expect(res.body.user.date_modified).to.eql(null);
+          expect(res.body.authToken).to.eql(expectedToken);
+        });
         
-    //});
+    });
   });
 });
