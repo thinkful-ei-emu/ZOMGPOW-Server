@@ -53,11 +53,6 @@ const GoalsService = {
       .where({ id })
       .update(newGoalData);
   },
-  updateStudentGoal(db, id, newGoalData) {
-    return db('student_goals')
-      .where({ id })
-      .update(newGoalData);
-  },
   getStudentIds(db, class_id) {
     return db('students')
       .select('id')
