@@ -34,11 +34,6 @@ const subGoalService ={
     return db('goals')
       .where({ id })
       .delete();
-  },
-  updateSubGoal(db, id, newSubGoalData) {
-    return db('goals')
-      .where({ id })
-      .update(newSubGoalData);
   }
 };
 
