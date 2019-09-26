@@ -8,8 +8,8 @@ studentGoalRouter
   .patch(jsonParser, async (req, res, next) => {
     try{
       const { student_goal_id } = req.params;
-      const { iscomplete, evaluation } = req.body;
-      const updatedLearningTarget = { iscomplete, evaluation };
+      const { iscomplete, evaluation, student_response } = req.body;
+      const updatedLearningTarget = { iscomplete, evaluation, student_response };
       const numberOfValues = Object.values(updatedLearningTarget).filter(Boolean).length;
       if(numberOfValues === 0) {
         return res.status(400).json({
