@@ -5,28 +5,25 @@ const studentGoalRouter = express.Router();
 const jsonParser = express.json();
 
 studentGoalRouter
-  .route('/learning_target/:class_id/:student_id/:goal_id')
+  .route('/learning_target/:student_goal_id')
   .patch(jsonParser, async (req, res, next) => {
-    const { class_id, student_id, goal_id } = req.params
-    const { evaluation } = req.body;
-    const updatedLearningTarget = { evaluation };
-    if(evaluation === undefined){
+    const { student_goal_id } = req.params;
+    const { iscomplete, evaluation } = req.body;
+    const updatedLearningTarget = { iscomplete, evaluation };
+    const numberOfValues = Object.values(updatedLearningTarget).filter(Boolean).length;
+    if(numberOfValues === 0) {
       return res.status(400).json({
-        error:{
-          message: 'Request body must contain an evaluation score'
+        error: {
+          message: 'Request body must contain information fields'
         }
       });
     }
-    studentService.updateLearningTarget(
+    await studentService.updateLearningTarget(
       req.app.get('db'),
-      class_id,
-      student_id,
-      goal_id,
+      student_goal_id,
       updatedLearningTarget
     )
-    .then(updated => {
-      res.status(204).end();
-    })
+    res.status(204).end()
     .catch(next);
   });
 
@@ -35,7 +32,7 @@ studentGoalRouter
   .patch(jsonParser, async (req, res, next) => {
     const { subgoal_id } = req.params;
     const { evaluation } = req.body;
-    const updatedSubGoal= { evaluation }
+    const updatedSubGoal= { evaluation };
     if(evaluation === undefined){
       return res.status(400).json({
         error:{
@@ -43,14 +40,13 @@ studentGoalRouter
         }
       });
     }
+    await 
     studentService.updateSubGoal(
       req.app.get('db'),
       subgoal_id,
       updatedSubGoal
     )
-    .then(updated => {
-      res.status(204).end();
-    })
+    res.status(204).end()
     .catch(next);
   });
 

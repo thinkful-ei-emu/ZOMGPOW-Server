@@ -63,7 +63,6 @@ authRouter
 authRouter
   .post('/student/login', jsonBodyParser, async (req, res, next) => {
     const { user_name } = req.body;
-    console.log(user_name)
     const loginStudent = user_name;
    
     if (!loginStudent) {

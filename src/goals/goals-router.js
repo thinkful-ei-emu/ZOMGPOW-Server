@@ -69,7 +69,6 @@ goalsRouter
     const { student_id } = req.params;
     const goals = await GoalsService.getStudentGoals(req.app.get('db'), student_id)
     const subgoals = await SubgoalService.getStudentSubGoals(req.app.get('db'), student_id)
-    console.log(goals)
     res.status(201).json({goals, subgoals});
     next();
     }
@@ -77,32 +76,6 @@ goalsRouter
       next(error)
     }
   })
-
-goalsRouter
-  .route('/student/goal/:id')
-  .patch(jsonParser, async (req, res, next) => {
-    const { id } = req.params;
-    console.log(req.body);
-    const { iscomplete } = req.body;
-    const updateGoal = { iscomplete };
-      if(iscomplete === undefined) {
-        return res.status(400).json({
-          error: {
-            message: 'Request body must contain information fields'
-          }
-        });
-      }
-      GoalsService.updateStudentGoal(
-        req.app.get('db'),
-        id,
-        updateGoal
-      )
-        .then(updated => {
-          console.log(updated)
-          res.status(204).send();
-        })
-        .catch(next);
-  });
 
 goalsRouter
   .route('/goal/:goal_id')
