@@ -4,9 +4,9 @@ const studentGoal ={
       .where({ id })
       .update(newSubGoalEval);
   },
-  updateLearningTarget(db, class_id, student_id, goal_id, newLearningTarget){
+  updateLearningTarget(db, student_goal_id, newLearningTarget){
     return db('student_goals')
-      .where({class_id: class_id}, {student_id: student_id}, {goal_id: goal_id})
+      .where({id: student_goal_id})
       .update(newLearningTarget);
   }
 };
