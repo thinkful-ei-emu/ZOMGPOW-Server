@@ -33,6 +33,24 @@ function makeUsersArray() {
     },
   ];
 }
+/**
+ * generate fixtures of class for a given user
+ * @param {object} user - contains `id` property
+ * @returns {Array(classes)} - arrays of classes
+ */
+function makeClass(user) {
+  const classes = [
+    {
+      id: 1,
+      class_title: 'Test class 1',
+      classcode: '1234',
+      teacher_id: 2,
+      date_created: '2029-01-22T16:28:32.615Z',
+    },
+  ];
+
+  return [classes];
+}
 
 
 /**
@@ -105,11 +123,29 @@ function seedUsers(db, users) {
   })
 }
 
-
+/**
+ * seed the databases with words and update sequence counter
+ * @param {knex instance} db
+ * @param {array} users - array of user objects for insertion
+ * @param {array} classes - array of classes objects for insertion
+ * @returns {Promise} - when all tables seeded
+ */
+function seedTeachersClass(db, users, classes) {
+  return db.transaction(async trx => {
+    await seedUsers(db, users)
+    await trx.into('classes').insert(classes)
+    await trx.raw(
+        `SELECT setval('classes_id_seq', ?)`,
+        [classes[classes.length - 1].id],
+      )   
+  }) 
+}
 module.exports = {
   makeKnexInstance,
   makeUsersArray,
+  makeClass,
   makeAuthHeader,
   cleanTables,
   seedUsers,
+  seedTeachersClass,
 }
