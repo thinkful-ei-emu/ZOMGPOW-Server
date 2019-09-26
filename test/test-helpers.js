@@ -34,6 +34,54 @@ function makeUsersArray() {
   ];
 }
 
+/**
+ * create a knex instance connected to postgres
+ * @returns {array} of goals objects
+ */
+function makeGoals() {
+  return [
+    {
+      // class_id: 1,
+      deadline: null,
+      goal_title: 'Test Goal 1',
+      goal_description: 'Test Goal Description 1',
+      exit_ticket_type: 'multiple choice',
+      exit_ticket_question: 'Test question 1?',
+      exit_ticket_options: ['1', '2', '3', '4'],
+      exit_ticket_correct_answer: 'B'
+    },
+    {
+      // class_id: 1,
+      deadline: null,
+      goal_title: 'Test Goal 2',
+      goal_description: 'Test Goal Description 2',
+      exit_ticket_type: 'short answer',
+      exit_ticket_question: 'Test question 2?',
+      exit_ticket_options: null,
+      exit_ticket_correct_answer: null
+    }
+  ]
+}
+
+/**
+ * create a knex instance connected to postgres
+ * @returns {array} of subgoals objects
+ */
+function makeSubGoals() {
+  return [
+    {
+      // student_goal_id: null,
+      subgoal_title: null,
+      subgoal_description: null,
+    },
+    {
+      // student_goal_id: null,
+      subgoal_title: null,
+      subgoal_description: null,
+    }
+  ]
+}
+
 
 /**
  * make a bearer token with jwt for authorization header
@@ -105,6 +153,28 @@ function seedUsers(db, users) {
   })
 }
 
+function seedGoals(db, goals) {
+  return db.transaction(async trx => {
+    await trx.into('goals').insert(goals)
+
+    await trx.raw(
+      `SELECT setval('goals_id_seq', ?)`,
+      [goals[goals.length - 1].id],
+    )
+  })
+}
+
+function seedSubGoals(db, subgoals) {
+  return db.transaction(async trx => {
+    await trx.into('subgoals').insert(subgoals)
+
+    await trx.raw(
+      `SELECT setval('subgoals_id_seq', ?)`, 
+      [subgoals[subgoals.length - 1].id],
+    )
+  })
+}
+
 
 module.exports = {
   makeKnexInstance,
@@ -112,4 +182,8 @@ module.exports = {
   makeAuthHeader,
   cleanTables,
   seedUsers,
+  makeGoals,
+  seedGoals,
+  makeSubGoals,
+  seedSubGoals,
 }
