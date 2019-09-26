@@ -38,11 +38,25 @@ const dataService = {
   },
   getStudentResponses(db, class_id, goal_id) {
     return db('students')
-      .leftJoin('student_goals', 'student_goals.student_id', 'students.id')    
-      .select('student_goals.goal_id As id', 'students.full_name As full_name', 'student_goals.iscomplete As complete', 'student_goals.evaluation As eval_score')
-      .where({'student_goals.class_id': class_id, 'student_goals.goal_id': goal_id})
+      .leftJoin('student_goals', 'student_goals.student_id', 'students.id')
+      .select('student_goals.goal_id As goal_id',
+        'student_goals.id As student_goal_id',
+        'students.full_name As full_name', 'student_goals.iscomplete As complete',
+        'student_goals.evaluation As eval_score')
+      .where({ 'student_goals.class_id': class_id, 'student_goals.goal_id': goal_id })
+  },
+  getStudentSubgoals(db, student_goal_id) {  
+    return db('subgoals')
+      .select('id',
+        'student_goal_id',
+        'subgoal_title As title',        
+        'subgoal_description As description',
+        'iscomplete As complete',
+        'evaluation As eval_score')
+      .where({ student_goal_id })
   }
-  
+
+
 
 
 
