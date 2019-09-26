@@ -1,7 +1,7 @@
 const app = require('../src/app');
 const helpers = require('./test-helpers');
 
-describe.only('Class Endpoints', function (){
+describe('Class Endpoints', function (){
   let db;
   const testUsers = helpers.makeUsersArray();
 
@@ -29,4 +29,22 @@ describe.only('Class Endpoints', function (){
       });
     });
   });
+  describe('GET /api/class/:class_id', () => {
+    it('responds with 200', () => {
+      const classId = 12345;  
+      return supertest(app)
+        .get(`/api/class/${classId}`)
+        .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
+        .expect(200);
+    });
+  }); 
+  describe.only('GET /api/class/:class_id/students', () => {
+    it('responds with 201', () => { 
+      const classId = 12345;   
+      return supertest(app)
+        .get(`/api/class/${classId}/students`)
+        .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
+        .expect(201);
+    });
+  }); 
 });
