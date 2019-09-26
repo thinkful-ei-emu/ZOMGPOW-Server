@@ -10,10 +10,10 @@ const jsonBodyParser = express.json();
 dataRouter
   .get('/:classId', requireAuth, async (req, res, next) => {
 
-    const { classId } = req.params
+    const { classId } = req.params;
 
     if (!classId) {
-      return res.status(400).json({ error: 'Need class id' })
+      return res.status(400).json({ error: 'Need class id' });
     }
 
     try {
@@ -23,23 +23,23 @@ dataRouter
       const totalStudents = await dataService.getTotalStudents(req.app.get('db'), classId)
    
       let time;     
-      let dataArr = []
+      let dataArr = [];
     
       for (let i = 0; i < dates.length; i++) {
-        let createdHours = Number(dates[i]["date_created"].getHours())
-        let completedHours = Number(dates[i]["date_completed"].getHours())
-        let createdMins = Number(dates[i]["date_created"].getMinutes())
-        let completedMins = Number(dates[i]["date_completed"].getMinutes())
-        let totalCreatedMins = (createdHours * 60) + createdMins
-        let totalCompletedMins = (completedHours * 60) + completedMins
-        let totalMins = totalCompletedMins - totalCreatedMins
+        let createdHours = Number(dates[i]['date_created'].getHours());
+        let completedHours = Number(dates[i]['date_completed'].getHours());
+        let createdMins = Number(dates[i]['date_created'].getMinutes());
+        let completedMins = Number(dates[i]['date_completed'].getMinutes());
+        let totalCreatedMins = (createdHours * 60) + createdMins;
+        let totalCompletedMins = (completedHours * 60) + completedMins;
+        let totalMins = totalCompletedMins - totalCreatedMins;
         let hours = Math.floor(totalMins / 60).toString();
-        let mins = (totalMins % 60).toString()
+        let mins = (totalMins % 60).toString();
         if (hours < 10) {
-          hours = `0${hours}`
+          hours = `0${hours}`;
         }
         if (mins < 10) {
-          mins = `0${mins}`
+          mins = `0${mins}`;
         }
         time = `${hours}h ${mins}m`
         dataArr.push({ id: dates[i]["id"], goal_title: dates[i]["goal_title"], time: time, question_type: dates[i]["question_type"], question: dates[i]["question"], options: dates[i]["options"], answer:dates[i]["answer"]})
@@ -61,10 +61,10 @@ dataRouter
       
       console.log(dataArr);
 
-      res.status(200).json({ dataArr })
+      res.status(200).json({ dataArr });
     }
     catch (e) {
-      next(e)
+      next(e);
     }
   })
   .get('/:classId/:goalId', requireAuth, async (req, res, next) => {
@@ -81,4 +81,4 @@ dataRouter
     }
   })
 
-module.exports = dataRouter
+module.exports = dataRouter;

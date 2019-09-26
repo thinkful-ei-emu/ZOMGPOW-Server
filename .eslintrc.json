@@ -15,7 +15,8 @@
     "extends": "eslint:recommended",
     // define the type of file `script` or `module` for ES6 Modules
     "parserOptions": {
-        "sourceType": "module"
+        "sourceType": "module",
+        "ecmaVersion": 2017
     },
     "globals": {
         "supertest": true,
