@@ -105,8 +105,12 @@ describe('Auth Endpoints', function () {
       )
     );
 
-    // it(`responds 200 and JWT auth token using secret`, () => {
-    //   const expectedToken = jwt.sign(
+    //  it.only(`responds 200 and JWT auth token using secret`, () => {
+    //     const userValidCreds = {
+    //         email: testUser.email,
+    //         password: testUser.password,
+    //       };
+    //     const expectedToken = jwt.sign(
     //     { user_id: testUser.id, name: testUser.name },
     //     process.env.JWT_SECRET,
     //     {
@@ -116,11 +120,12 @@ describe('Auth Endpoints', function () {
     //     }
     //   );
     //   return supertest(app)
-    //     .put('/api/auth/teacher/login')
-    //     .set('Authorization', helpers.makeAuthHeader(testUser))
-    //     .expect(200, {
-    //       authToken: expectedToken,
-    //     });
-    // });
+    //   .put('/api/auth/teacher/login')
+    //   .set('Authorization', helpers.makeAuthHeader(testUser))
+    //   .expect(200, {
+    //     authToken: expectedToken,
+    //   });
+        
+    //});
   });
 });
