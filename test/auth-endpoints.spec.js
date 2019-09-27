@@ -7,6 +7,8 @@ describe('Auth Endpoints', function () {
 
   const testUsers = helpers.makeUsersArray();
   const testUser = testUsers[0];
+  const testStudents = helpers.makeStudentsArray();
+  const testStudent = testStudents[0];
 
   before('make knex instance', () => {
     db = helpers.makeKnexInstance();
@@ -20,7 +22,7 @@ describe('Auth Endpoints', function () {
   afterEach('cleanup', () => helpers.cleanTables(db));
 
   /**
-   * @description Get token for login
+   * @description Get token for teacher login
    **/
   describe('POST /api/auth/teacher/login', () => {
     beforeEach('insert users', () =>
@@ -122,6 +124,45 @@ describe('Auth Endpoints', function () {
           authToken: expectedToken,
         });
         
+    });
+  });
+
+  /**
+   * @description Get token for student login
+   **/
+  describe('POST /api/auth/student/login', () => {
+    beforeEach('insert students', () =>
+      helpers.seedStudents(
+        db,
+        testStudent,
+      )
+    );
+
+    const requiredFields = ['user_name'];
+
+    requiredFields.forEach(field => {
+      const loginAttemptBody = {
+        user_name: testStudent.user_name,
+      };
+
+      it.only(`responds with 400 required error when '${field}' is missing`, () => {
+        delete loginAttemptBody[field];
+
+        return supertest(app)
+          .post('/api/auth/student/login')
+          .send(loginAttemptBody)
+          .expect(400, {
+            error: `Missing '${field}' in request body`,
+          });
+      });
+    });
+
+    it('responds 400 \'invalid username\' when bad username', () => {
+      const userInvalidUser = { user_name: 'user-not' };
+      return supertest(app)
+        .post('/api/auth/student/login')
+        .send(userInvalidUser)
+        .expect(400, { error: 'Incorrect username' });
     });
   });
 });

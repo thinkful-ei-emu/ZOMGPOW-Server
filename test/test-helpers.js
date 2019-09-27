@@ -15,7 +15,7 @@ function makeKnexInstance() {
 
 /**
  * create a knex instance connected to postgres
- * @returns {array} of user objects
+ * @returns {array} of user(teacher) objects
  */
 function makeUsersArray() {
   return [
@@ -33,18 +33,39 @@ function makeUsersArray() {
     },
   ];
 }
+
+/**
+ * create a knex instance connected to postgres
+ * @returns {array} of user objects
+ */
+function makeStudentsArray(classes) {
+  return [
+    {
+      id: 1,
+      user_name: 'student-1',
+      full_name: 'test-student-1',
+      class_id: classes.id,
+    },
+    {
+      id: 2,
+      user_name: 'student-2',
+      full_name: 'test-student-2',
+      class_id: classes.id,
+    },
+  ];
+}
 /**
  * generate fixtures of class for a given user
  * @param {object} user - contains `id` property
  * @returns {Array(classes)} - arrays of classes
  */
-function makeClass(user) {
+function makeClass(teachers) {
   const classes = [
     {
       id: 1,
       class_title: 'Test class 1',
       classcode: '1234',
-      teacher_id: 2,
+      teacher_id: teachers[0].id,
       date_created: '2029-01-22T16:28:32.615Z',
     },
   ];
@@ -171,6 +192,16 @@ function seedUsers(db, users) {
   })
 }
 
+function seedStudents(db, students){
+  return db.transaction(async trx => {
+    await trx.into('students').insert(students)
+
+    await trx.raw(
+      `SELECT setval('students_id_seq', ?)`,
+      [students[students.length - 1].id],
+    )
+  })
+}
 function seedGoals(db, goals) {
   return db.transaction(async trx => {
     await trx.into('goals').insert(goals)
@@ -214,10 +245,12 @@ function seedTeachersClass(db, users, classes) {
 module.exports = {
   makeKnexInstance,
   makeUsersArray,
+  makeStudentsArray,
   makeClass,
   makeAuthHeader,
   cleanTables,
   seedUsers,
+  seedStudents,
   makeGoals,
   seedGoals,
   makeSubGoals,
