@@ -44,13 +44,13 @@ function makeStudentsArray(classes) {
       id: 1,
       user_name: 'student-1',
       full_name: 'test-student-1',
-      class_id: classes.id,
+      class_id: classes[0].id,
     },
     {
       id: 2,
       user_name: 'student-2',
       full_name: 'test-student-2',
-      class_id: classes.id,
+      class_id: classes[0].id,
     },
   ];
 }
@@ -70,7 +70,7 @@ function makeClass(teachers) {
     },
   ];
 
-  return [classes];
+  return classes;
 }
 
 /**
@@ -195,11 +195,21 @@ function seedUsers(db, users) {
 function seedStudents(db, students){
   return db.transaction(async trx => {
     await trx.into('students').insert(students)
-
+    console.log(students)
     await trx.raw(
       `SELECT setval('students_id_seq', ?)`,
       [students[students.length - 1].id],
     )
+  })
+}
+
+function seedClass(db, classes){
+  return db.transaction(async trx => {
+    await trx.into('classes').insert(classes)
+    await trx.raw(
+      `SELECT setval('classes_id_seq', ?)`,
+      [classes[classes.length - 1].id], 
+    ) 
   })
 }
 function seedGoals(db, goals) {
@@ -225,23 +235,7 @@ function seedSubGoals(db, subgoals) {
 }
 
 
-/**
- * seed the databases with words and update sequence counter
- * @param {knex instance} db
- * @param {array} users - array of user objects for insertion
- * @param {array} classes - array of classes objects for insertion
- * @returns {Promise} - when all tables seeded
- */
-function seedTeachersClass(db, users, classes) {
-  return db.transaction(async trx => {
-    await seedUsers(db, users)
-    await trx.into('classes').insert(classes)
-    await trx.raw(
-        `SELECT setval('classes_id_seq', ?)`,
-        [classes[classes.length - 1].id],
-      )   
-  }) 
-}
+
 module.exports = {
   makeKnexInstance,
   makeUsersArray,
@@ -254,6 +248,6 @@ module.exports = {
   makeGoals,
   seedGoals,
   makeSubGoals,
-  seedSubGoals,
-  seedTeachersClass,
+  seedSubGoals, 
+  seedClass,
 }

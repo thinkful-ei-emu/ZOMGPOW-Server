@@ -7,8 +7,10 @@ describe('Auth Endpoints', function () {
 
   const testUsers = helpers.makeUsersArray();
   const testUser = testUsers[0];
-  const testStudents = helpers.makeStudentsArray();
+  const testClass = helpers.makeClass(testUsers);
+  const testStudents = helpers.makeStudentsArray(testClass);
   const testStudent = testStudents[0];
+
 
   before('make knex instance', () => {
     db = helpers.makeKnexInstance();
@@ -131,10 +133,23 @@ describe('Auth Endpoints', function () {
    * @description Get token for student login
    **/
   describe('POST /api/auth/student/login', () => {
+    beforeEach('insert users',() =>
+      helpers.seedUsers(
+        db,
+        testUsers,
+      )
+    ); 
+  
+    beforeEach('insert classes',() =>  
+      helpers.seedClass(
+        db,
+        testClass,
+      )
+    );
     beforeEach('insert students', () =>
       helpers.seedStudents(
         db,
-        testStudent,
+        testStudents,
       )
     );
 
@@ -142,17 +157,17 @@ describe('Auth Endpoints', function () {
 
     requiredFields.forEach(field => {
       const loginAttemptBody = {
-        user_name: testStudent.user_name,
+        user_name: testStudents.user_name,
       };
 
-      it.only(`responds with 400 required error when '${field}' is missing`, () => {
+      it(`responds with 400 required error when '${field}' is missing`, () => {
         delete loginAttemptBody[field];
 
         return supertest(app)
           .post('/api/auth/student/login')
           .send(loginAttemptBody)
           .expect(400, {
-            error: `Missing '${field}' in request body`,
+            error: `Missing ${field} in request body`,
           });
       });
     });
