@@ -21,6 +21,9 @@ dataRouter
       const dates = await dataService.getTimeForGoal(req.app.get('db'), classId)
       const completed = await dataService.getCompleted(req.app.get('db'), classId)
       const totalStudents = await dataService.getTotalStudents(req.app.get('db'), classId)
+  
+     
+   
 
       let time;
       let dataArr = [];
@@ -42,7 +45,9 @@ dataRouter
           mins = `0${mins}`;
         }
         time = `${hours}h ${mins}m`
-        dataArr.push({ id: dates[i]["id"], goal_title: dates[i]["goal_title"], time: time, question_type: dates[i]["question_type"], question: dates[i]["question"], options: dates[i]["options"], answer: dates[i]["answer"] })
+      
+        dataArr.push({ id: dates[i]["id"], goal_title: dates[i]["goal_title"], time: time,})
+      
       }
 
       for (let i = 0; i < dataArr.length; i++) {
@@ -59,8 +64,6 @@ dataRouter
         }
       }
 
-      console.log(dataArr);
-
       res.status(200).json({ dataArr });
     }
     catch (e) {
@@ -71,8 +74,14 @@ dataRouter
     const { classId, goalId } = req.params;
     try {
       const studentResponses = await dataService.getStudentResponses(req.app.get('db'), classId, goalId)
-
-      res.status(200).json({ studentResponses })
+      const exitTicketInfo = await dataService.getExitTicketInfo(req.app.get('db'), goalId)
+      const correctResponse = await dataService.getCorrectResponse(req.app.get('db'), goalId, exitTicketInfo[0].answer)
+      let correctPer = `${(Number(correctResponse[0].correct_response) / studentResponses.length * 100).toFixed(0)}%`
+  
+      exitTicketInfo[0]['correct_res_total'] = correctResponse[0].correct_response;
+      exitTicketInfo[0]['res_total'] = studentResponses.length;
+      exitTicketInfo[0]['correct_res_avg'] = correctPer;
+      res.status(200).json({ studentResponses, exitTicketInfo })
     }
     catch (e) {
       next(e)
@@ -83,7 +92,6 @@ dataRouter
 
     try {
       const studentSubgoals = await dataService.getStudentSubgoals(req.app.get('db'), studentGoalId)
-      console.log('student response:', studentSubgoals);
       res.status(200).json({ studentSubgoals })
     }
     catch (e) {
