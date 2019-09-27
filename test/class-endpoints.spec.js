@@ -38,7 +38,7 @@ describe('Class Endpoints', function (){
         .expect(200);
     });
   }); 
-  describe.only('GET /api/class/:class_id/students', () => {
+  describe('GET /api/class/:class_id/students', () => {
     it('responds with 201', () => { 
       const classId = 12345;   
       return supertest(app)
