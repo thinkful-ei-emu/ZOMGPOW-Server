@@ -1,12 +1,12 @@
 const studentGoal ={
   updateSubGoal(db, id, newSubGoalEval){
     return db('subgoals')
-      .where({ id })
+      .where({ student_goal_id: id })
       .update(newSubGoalEval);
   },
-  updateLearningTarget(db, student_goal_id, newLearningTarget){
+  updateLearningTarget(db, id, newLearningTarget){
     return db('student_goals')
-      .where({id: student_goal_id})
+      .where({id: id})
       .update(newLearningTarget);
   }
 };

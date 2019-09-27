@@ -31,22 +31,23 @@ studentGoalRouter
   });
 
 studentGoalRouter
-  .route('/subgoal/:subgoal_id')
+  .route('/subgoal/:id')
   .patch(jsonParser, async (req, res, next) => {
     try {
-      const { subgoal_id } = req.params;
-      const { evaluation } = req.body;
-      const updatedSubGoal= { evaluation };
-      if(evaluation === undefined){
+      const { id } = req.params;
+      const { subgoal_title, subgoal_description, iscomplete, date_created, evaluation } = req.body;
+      const updatedSubGoal= { subgoal_title, subgoal_description, iscomplete, date_created, evaluation };
+      const numberOfValues = Object.values(updatedSubGoal).filter(Boolean).length;
+      if(numberOfValues === 0) {
         return res.status(400).json({
-          error:{
-            message: 'Request body must contain an evaluation score'
+          error: {
+            message: 'Request body must contain information fields'
           }
         });
       }
       await studentService.updateSubGoal(
         req.app.get('db'),
-        subgoal_id,
+        id,
         updatedSubGoal
       );
       res.status(204).end();
