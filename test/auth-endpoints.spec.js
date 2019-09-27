@@ -71,15 +71,6 @@ describe('Auth Endpoints', function () {
         email: testUser.email,
         password: testUser.password,
       };
-      const expectedToken = jwt.sign(
-        { user_id: testUser.id, name: testUser.name },
-        process.env.JWT_SECRET,
-        {
-          subject: testUser.email,
-          //expiresIn: process.env.JWT_EXPIRY,
-          algorithm: 'HS256',
-        }
-      );
       return supertest(app)
         .post('/api/auth/teacher/login')
         .send(userValidCreds)
