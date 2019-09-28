@@ -53,6 +53,8 @@ goalsRouter
 
       let goal = await GoalsService.insertGoal(req.app.get('db'), newGoal);
       await GoalsService.insertStudentGoals(req.app.get('db'), goal.id, class_id);
+      req.app.get('io').emit('new goal', (goal));
+      
       res.status(201)
         .location(path.posix.join(req.originalUrl, `/${goal.id}`))
         .json(goal);
