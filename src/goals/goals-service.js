@@ -43,7 +43,7 @@ const GoalsService = {
   getStudentGoalsTable(db, class_id) {
     return db('student_goals')
       .select('*')
-      .where({ class_id })
+      .where({ class_id });
   },
   insertGoal(db, newGoal){
     return db('goals')
@@ -75,7 +75,7 @@ const GoalsService = {
   async insertStudentGoals(db, goal_id, class_id){
     let stuArr = await this.getStudentIds(db, class_id);
     for(let i=0; i < stuArr.length; i++){
-      this.insertStudentGoal(db, class_id, goal_id, stuArr[i].id)
+      this.insertStudentGoal(db, class_id, goal_id, stuArr[i].id);
     }
   }
 };
