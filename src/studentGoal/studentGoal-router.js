@@ -31,11 +31,12 @@ studentGoalRouter
           }
         });
       }
-      await studentService.updateLearningTarget(
+      let patchGoal = await studentService.updateLearningTarget(
         req.app.get('db'),
         student_goal_id,
         updatedLearningTarget
       );
+      req.app.get('io').emit('patch student goal', (patchGoal));
       res.status(204).end();
     }
     catch(error) {
@@ -58,11 +59,12 @@ studentGoalRouter
           }
         });
       }
-      await studentService.updateSubGoal(
+      let patchSubgoal = await studentService.updateSubGoal(
         req.app.get('db'),
         id,
         updatedSubGoal
       );
+      req.app.get('io').emit('patch subgoal', (patchSubgoal));
       res.status(204).end();
     }
     catch(error) {

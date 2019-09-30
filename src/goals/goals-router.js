@@ -108,11 +108,12 @@ goalsRouter
           }
         });
       }
-      await GoalsService.updateGoal(
+      let updated = await GoalsService.updateGoal(
         req.app.get('db'),
         goal_id,
         updateGoal
       );
+      req.app.get('io').emit('patch goal', (updated));
       res.status(204).end();
     }
     catch(error) {
