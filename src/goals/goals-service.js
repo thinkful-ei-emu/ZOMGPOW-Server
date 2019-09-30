@@ -10,7 +10,11 @@ const GoalsService = {
         'goal_description',
         'date_created',
         'deadline',
-        'date_completed'
+        'date_completed',
+        'exit_ticket_type',
+        'exit_ticket_question',
+        'exit_ticket_options',
+        'exit_ticket_correct_answer'
       )
       .where({ class_id });
   },
