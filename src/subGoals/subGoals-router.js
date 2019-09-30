@@ -37,6 +37,7 @@ subGoalRouter
         req.app.get('db'),
         newSubGoal
       );
+      req.app.get('io').emit('new subgoal', (subGoal));
       res
         .status(201)
         .location(path.posix.join(req.originalUrl, `/${subGoal.id}`))

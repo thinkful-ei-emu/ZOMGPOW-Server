@@ -11,6 +11,8 @@ const subGoalRouter = require('./subGoals/subGoals-router');
 const goalsRouter = require('./goals/goals-router');
 const dataRouter = require('./data/data-router');
 const studentGoalRouter = require('./studentGoal/studentGoal-router');
+const { CLIENT_ORIGIN } = require('./config');
+
 
 const app = express();
 
@@ -18,7 +20,7 @@ const morganOption = (NODE_ENV === 'production') ? 'tiny' : 'common';
 
 app.use(morgan(morganOption));
 app.use(helmet());
-app.use(cors());
+app.use(cors({origin: CLIENT_ORIGIN, credentials: true}));
 
 
 app.use('/api/register', registrationRouter);
