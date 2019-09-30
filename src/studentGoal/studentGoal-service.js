@@ -1,4 +1,9 @@
 const studentGoal ={
+  getClassId(db, id){
+    return db('students')
+      .where({ id })
+      .first();
+  },
   updateSubGoal(db, id, newSubGoalEval){
     return db('subgoals')
       .where({ student_goal_id: id })

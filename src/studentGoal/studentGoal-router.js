@@ -4,6 +4,19 @@ const studentGoalRouter = express.Router();
 const jsonParser = express.json();
 
 studentGoalRouter
+  .route('/student/:student_id')
+  .get(async (req, res, next) => {
+    try{
+      const {student_id} = req.params;
+      const student = await studentService.getClassId(req.app.get('db'), student_id);
+      res.status(201).json({student});
+    }
+    catch(e){
+      next(e);
+    }
+  });
+
+studentGoalRouter
   .route('/learning_target/:student_goal_id')
   .patch(jsonParser, async (req, res, next) => {
     try{
