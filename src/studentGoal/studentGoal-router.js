@@ -4,6 +4,19 @@ const studentGoalRouter = express.Router();
 const jsonParser = express.json();
 
 studentGoalRouter
+  .route('/student/:student_id')
+  .get(async (req, res, next) => {
+    try{
+      const {student_id} = req.params;
+      const student = await studentService.getClassId(req.app.get('db'), student_id);
+      res.status(201).json({student});
+    }
+    catch(e){
+      next(e);
+    }
+  });
+
+studentGoalRouter
   .route('/learning_target/:student_goal_id')
   .patch(jsonParser, async (req, res, next) => {
     try{
@@ -18,11 +31,12 @@ studentGoalRouter
           }
         });
       }
-      await studentService.updateLearningTarget(
+      let patchGoal = await studentService.updateLearningTarget(
         req.app.get('db'),
         student_goal_id,
         updatedLearningTarget
       );
+      req.app.get('io').emit('patch student goal', (patchGoal));
       res.status(204).end();
     }
     catch(error) {
@@ -45,11 +59,12 @@ studentGoalRouter
           }
         });
       }
-      await studentService.updateSubGoal(
+      let patchSubgoal = await studentService.updateSubGoal(
         req.app.get('db'),
         id,
         updatedSubGoal
       );
+      req.app.get('io').emit('patch subgoal', (patchSubgoal));
       res.status(204).end();
     }
     catch(error) {
