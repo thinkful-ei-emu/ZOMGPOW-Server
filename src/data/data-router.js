@@ -21,9 +21,7 @@ dataRouter
       const dates = await dataService.getTimeForGoal(req.app.get('db'), classId)
       const completed = await dataService.getCompleted(req.app.get('db'), classId)
       const totalStudents = await dataService.getTotalStudents(req.app.get('db'), classId)
-  
-     
-   
+
 
       let time;
       let dataArr = [];
@@ -45,23 +43,36 @@ dataRouter
           mins = `0${mins}`;
         }
         time = `${hours}h ${mins}m`
-      
-        dataArr.push({ id: dates[i]["id"], goal_title: dates[i]["goal_title"], time: time,})
-      
+
+        dataArr.push({ id: dates[i]["id"], goal_title: dates[i]["goal_title"], time: time, })
+
       }
 
       for (let i = 0; i < dataArr.length; i++) {
         for (let j = 0; j < completed.length; j++) {
           if (completed[j].id === dataArr[i].id) {
             dataArr[i]["total_completed"] = completed[j]["completed"]
+
+
+          }
+          else {
+            dataArr[i]["total_completed"] = 0;
+          }
+        }
+      }
+
+      for (let i = 0; i < dataArr.length; i++) {
+        for (let j = 0; j < totalStudents.length; j++){
+          if (totalStudents[j].id === dataArr[i].id){          
             dataArr[i]["total_students"] = totalStudents[j]["total_students"]
-            dataArr[i]["avg_completed"] = `${Math.ceil(Number(completed[j]["completed"]) / Number(totalStudents[j]["total_students"]) * 100)}%`
+            dataArr[i]["avg_completed"] = `${Math.ceil(Number(dataArr[i]["total_completed"]) / Number(totalStudents[j]["total_students"]) * 100)}%`
             dataArr[i]["eval_total"] = totalStudents[j]["eval_total"]
             dataArr[i]["eval_avg"] = Number(totalStudents[j]["eval_avg"]).toFixed(2);
             dataArr[i]["eval_percentage"] = `${(((Number(totalStudents[j]["eval_avg"])) / 3) * 100).toFixed(0)}%`;
-
           }
+         
         }
+        
       }
 
       res.status(200).json({ dataArr });
@@ -77,7 +88,7 @@ dataRouter
       const exitTicketInfo = await dataService.getExitTicketInfo(req.app.get('db'), goalId)
       const correctResponse = await dataService.getCorrectResponse(req.app.get('db'), goalId, exitTicketInfo[0].answer)
       let correctPer = `${(Number(correctResponse[0].correct_response) / studentResponses.length * 100).toFixed(0)}%`
-  
+
       exitTicketInfo[0]['correct_res_total'] = correctResponse[0].correct_response;
       exitTicketInfo[0]['res_total'] = studentResponses.length;
       exitTicketInfo[0]['correct_res_avg'] = correctPer;
@@ -101,6 +112,6 @@ dataRouter
 
 
 
- 
+
 
 module.exports = dataRouter;
