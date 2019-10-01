@@ -69,15 +69,11 @@ goalsRouter
     try {
       const { student_id } = req.params;
       const goals = await GoalsService.getStudentGoals(req.app.get('db'), student_id);      
-      const subgoals = await SubgoalService.getStudentSubGoals(req.app.get('db'), student_id);     
-      console.log('goals:',goals)
-      console.log('subgoal:', subgoals)
+      const subgoals = await SubgoalService.getStudentSubGoals(req.app.get('db'), student_id);    
       
       for(let i=0; i < goals.length; i++){
-        goals[i]["newSubgoals"] = subgoals.filter(subgoal => subgoal.goal_id === goals[i].id);
+        goals[i]["subgoals"] = subgoals.filter(subgoal => subgoal.goal_id === goals[i].id);
       }
-
-      console.log('updated goals', goals)
 
       // res.status(201).json({goals, subgoals});      
       res.status(201).json({goals});
