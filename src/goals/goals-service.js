@@ -10,7 +10,11 @@ const GoalsService = {
         'goal_description',
         'date_created',
         'deadline',
-        'date_completed'
+        'date_completed',
+        'exit_ticket_type',
+        'exit_ticket_question',
+        'exit_ticket_options',
+        'exit_ticket_correct_answer'
       )
       .where({ class_id });
   },
@@ -23,6 +27,7 @@ const GoalsService = {
         'goals.goal_description',
         'goals.deadline',
         'goals.date_completed',
+        'goals.date_created',
         'goals.exit_ticket_type',
         'goals.exit_ticket_question',
         'goals.exit_ticket_options',
@@ -39,7 +44,7 @@ const GoalsService = {
   getStudentGoalsTable(db, class_id) {
     return db('student_goals')
       .select('*')
-      .where({ class_id })
+      .where({ class_id });
   },
   insertGoal(db, newGoal){
     return db('goals')
@@ -71,7 +76,7 @@ const GoalsService = {
   async insertStudentGoals(db, goal_id, class_id){
     let stuArr = await this.getStudentIds(db, class_id);
     for(let i=0; i < stuArr.length; i++){
-      this.insertStudentGoal(db, class_id, goal_id, stuArr[i].id)
+      this.insertStudentGoal(db, class_id, goal_id, stuArr[i].id);
     }
   }
 };

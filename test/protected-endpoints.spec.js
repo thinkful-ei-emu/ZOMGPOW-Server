@@ -5,7 +5,6 @@ describe('Protected Endpoints', function () {
   let db;
 
   const testUsers = helpers.makeUsersArray();
-  const [testUser] = testUsers;
 
 
   before('make knex instance', () => {
@@ -36,24 +35,24 @@ describe('Protected Endpoints', function () {
 
   protectedEndpoints.forEach(endpoint => {
     describe(endpoint.name, () => {
-      it(`responds 401 'Missing bearer token' when no bearer token`, () => {
+      it('responds 401 \'Missing bearer token\' when no bearer token', () => {
         return endpoint.method(endpoint.path)
-          .expect(401, { error: `Unauthorized Request` })
+          .expect(401, { error: 'Unauthorized Request' });
       });
 
-      it(`responds 401 'Unauthorized request' when invalid JWT secret`, () => {
-        const validUser = testUsers[0]
-        const invalidSecret = 'bad-secret'
+      it('responds 401 \'Unauthorized request\' when invalid JWT secret', () => {
+        const validUser = testUsers[0];
+        const invalidSecret = 'bad-secret';
         return endpoint.method(endpoint.path)
           .set('Authorization', helpers.makeAuthHeader(validUser, invalidSecret))
-          .expect(401, { error: `Unauthorized request` })
+          .expect(401, { error: 'Unauthorized request' });
       });
 
-      it(`responds 401 'Unauthorized request' when invalid sub in payload`, () => {
-        const invalidUser = { email: 'user-not-existy', id: 1 }
+      it('responds 401 \'Unauthorized request\' when invalid sub in payload', () => {
+        const invalidUser = { email: 'user-not-existy', id: 1 };
         return endpoint.method(endpoint.path)
           .set('Authorization', helpers.makeAuthHeader(invalidUser))
-          .expect(401, { error: `Unauthorized request` })
+          .expect(401, { error: 'Unauthorized request' });
       });
     });
   });

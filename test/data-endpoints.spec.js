@@ -30,9 +30,10 @@ describe('Data Endpoints', function (){
     });
   });
   describe('GET /api/data/:classId', () => {
-    it('responds with 404', () => {  
+    it('responds with 404', () => { 
+      const classId = 1234;
       return supertest(app)
-        .get('/api/data')
+        .get(`/api/data/${classId}`)
         .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
         .expect(404);
     });

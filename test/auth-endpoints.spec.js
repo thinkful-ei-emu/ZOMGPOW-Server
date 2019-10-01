@@ -7,6 +7,10 @@ describe('Auth Endpoints', function () {
 
   const testUsers = helpers.makeUsersArray();
   const testUser = testUsers[0];
+  const testClass = helpers.makeClass(testUsers);
+  const testStudents = helpers.makeStudentsArray(testClass);
+  const testStudent = testStudents[0];
+
 
   before('make knex instance', () => {
     db = helpers.makeKnexInstance();
@@ -20,7 +24,7 @@ describe('Auth Endpoints', function () {
   afterEach('cleanup', () => helpers.cleanTables(db));
 
   /**
-   * @description Get token for login
+   * @description Get token for teacher login
    **/
   describe('POST /api/auth/teacher/login', () => {
     beforeEach('insert users', () =>
@@ -71,15 +75,6 @@ describe('Auth Endpoints', function () {
         email: testUser.email,
         password: testUser.password,
       };
-      const expectedToken = jwt.sign(
-        { user_id: testUser.id, name: testUser.name },
-        process.env.JWT_SECRET,
-        {
-          subject: testUser.email,
-          //expiresIn: process.env.JWT_EXPIRY,
-          algorithm: 'HS256',
-        }
-      );
       return supertest(app)
         .post('/api/auth/teacher/login')
         .send(userValidCreds)
@@ -122,6 +117,58 @@ describe('Auth Endpoints', function () {
           authToken: expectedToken,
         });
         
+    });
+  });
+
+  /**
+   * @description Get token for student login
+   **/
+  describe('POST /api/auth/student/login', () => {
+    beforeEach('insert users',() =>
+      helpers.seedUsers(
+        db,
+        testUsers,
+      )
+    ); 
+  
+    beforeEach('insert classes',() =>  
+      helpers.seedClass(
+        db,
+        testClass,
+      )
+    );
+    beforeEach('insert students', () =>
+      helpers.seedStudents(
+        db,
+        testStudents,
+      )
+    );
+
+    const requiredFields = ['user_name'];
+
+    requiredFields.forEach(field => {
+      const loginAttemptBody = {
+        user_name: testStudents.user_name,
+      };
+
+      it(`responds with 400 required error when '${field}' is missing`, () => {
+        delete loginAttemptBody[field];
+
+        return supertest(app)
+          .post('/api/auth/student/login')
+          .send(loginAttemptBody)
+          .expect(400, {
+            error: `Missing ${field} in request body`,
+          });
+      });
+    });
+
+    it('responds 400 \'invalid username\' when bad username', () => {
+      const userInvalidUser = { user_name: 'user-not' };
+      return supertest(app)
+        .post('/api/auth/student/login')
+        .send(userInvalidUser)
+        .expect(400, { error: 'Incorrect username' });
     });
   });
 });

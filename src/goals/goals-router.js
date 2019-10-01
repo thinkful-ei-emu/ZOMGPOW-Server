@@ -53,6 +53,8 @@ goalsRouter
 
       let goal = await GoalsService.insertGoal(req.app.get('db'), newGoal);
       await GoalsService.insertStudentGoals(req.app.get('db'), goal.id, class_id);
+      req.app.get('io').emit('new goal', (goal));
+      
       res.status(201)
         .location(path.posix.join(req.originalUrl, `/${goal.id}`))
         .json(goal);
@@ -68,9 +70,15 @@ goalsRouter
   .get(async (req, res, next) => {
     try {
       const { student_id } = req.params;
-      const goals = await GoalsService.getStudentGoals(req.app.get('db'), student_id);
-      const subgoals = await SubgoalService.getStudentSubGoals(req.app.get('db'), student_id);
-      res.status(201).json({goals, subgoals});
+      const goals = await GoalsService.getStudentGoals(req.app.get('db'), student_id);      
+      const subgoals = await SubgoalService.getStudentSubGoals(req.app.get('db'), student_id);    
+      
+      for(let i=0; i < goals.length; i++){
+        goals[i]["subgoals"] = subgoals.filter(subgoal => subgoal.goal_id === goals[i].id);
+      }
+
+      // res.status(201).json({goals, subgoals});      
+      res.status(201).json({goals});
       next();
     }
     catch(error) {
@@ -106,11 +114,12 @@ goalsRouter
           }
         });
       }
-      await GoalsService.updateGoal(
+      let updated = await GoalsService.updateGoal(
         req.app.get('db'),
         goal_id,
         updateGoal
       );
+      req.app.get('io').emit('patch goal', (updated));
       res.status(204).end();
     }
     catch(error) {
