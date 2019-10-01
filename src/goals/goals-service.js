@@ -27,6 +27,7 @@ const GoalsService = {
         'goals.goal_description',
         'goals.deadline',
         'goals.date_completed',
+        'goals.date_created',
         'goals.exit_ticket_type',
         'goals.exit_ticket_question',
         'goals.exit_ticket_options',
