@@ -21,9 +21,7 @@ dataRouter
       const dates = await dataService.getTimeForGoal(req.app.get('db'), classId)
       const completed = await dataService.getCompleted(req.app.get('db'), classId)
       const totalStudents = await dataService.getTotalStudents(req.app.get('db'), classId)
-  
-     
-   
+
 
       let time;
       let dataArr = [];
@@ -48,20 +46,6 @@ dataRouter
       
         dataArr.push({ id: dates[i]["id"], goal_title: dates[i]["goal_title"], time: time,})
       
-      }
-
-      for (let i = 0; i < dataArr.length; i++) {
-        for (let j = 0; j < completed.length; j++) {
-          if (totalStudents[j].id === dataArr[i].id) {
-            dataArr[i]["total_completed"] = completed[j]["completed"]
-            dataArr[i]["total_students"] = totalStudents[j]["total_students"]
-            dataArr[i]["avg_completed"] = `${Math.ceil(Number(completed[j]["completed"]) / Number(totalStudents[j]["total_students"]) * 100)}%`
-            dataArr[i]["eval_total"] = totalStudents[j]["eval_total"]
-            dataArr[i]["eval_avg"] = Number(totalStudents[j]["eval_avg"]).toFixed(2);
-            dataArr[i]["eval_percentage"] = `${(((Number(totalStudents[j]["eval_avg"])) / 3) * 100).toFixed(0)}%`;
-
-          }
-        }
       }
 
       for (let i = 0; i < dataArr.length; i++) {
