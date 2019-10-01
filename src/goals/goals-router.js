@@ -87,6 +87,26 @@ goalsRouter
   });
 
 goalsRouter
+  .route('/student/current/:student_id')
+  .get(async (req, res, next) => {
+    try {
+      const { student_id } = req.params;
+      const goals = await GoalsService.getStudentGoals(req.app.get('db'), student_id);      
+      const subgoals = await SubgoalService.getStudentSubGoals(req.app.get('db'), student_id);
+      
+      let currentGoal = goals[goals.length - 1];
+
+      currentGoal['subgoal'] = subgoals.filter(subgoal => subgoal.goal_id === currentGoal.id);
+           
+      res.status(201).json({currentGoal});
+      next();
+    }
+    catch(error) {
+      next(error);
+    }
+  });
+
+goalsRouter
   .route('/goal/:goal_id')
   .delete(async (req, res, next) => {
     try {
