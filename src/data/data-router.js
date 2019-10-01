@@ -47,6 +47,20 @@ dataRouter
 
       for (let i = 0; i < dataArr.length; i++) {
         for (let j = 0; j < completed.length; j++) {
+          if (totalStudents[j].id === dataArr[i].id) {
+            // dataArr[i]["total_completed"] = completed[j]["completed"]
+            dataArr[i]["total_students"] = totalStudents[j]["total_students"]
+            // dataArr[i]["avg_completed"] = `${Math.ceil(Number(completed[j]["completed"]) / Number(totalStudents[j]["total_students"]) * 100)}%`
+            dataArr[i]["eval_total"] = totalStudents[j]["eval_total"]
+            dataArr[i]["eval_avg"] = Number(totalStudents[j]["eval_avg"]).toFixed(2);
+            dataArr[i]["eval_percentage"] = `${(((Number(totalStudents[j]["eval_avg"])) / 3) * 100).toFixed(0)}%`;
+
+          }
+        }
+      }
+
+      for (let i = 0; i < dataArr.length; i++) {
+        for (let j = 0; j < completed.length; j++) {
           if (completed[j].id === dataArr[i].id) {
             dataArr[i]["total_completed"] = completed[j]["completed"]
             dataArr[i]["total_students"] = totalStudents[j]["total_students"]
@@ -59,7 +73,10 @@ dataRouter
         }
       }
 
-      console.log(dataArr);
+
+      console.log('total-completed', completed)
+      console.log('total', totalStudents)
+      // console.log(dataArr);
 
       res.status(200).json({ dataArr });
     }
