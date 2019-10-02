@@ -81,7 +81,7 @@ goalsRouter
         return a.id - b.id;
       });
        
-      // res.status(201).json({goals, subgoals});      
+      res.status(201).json({goals, subgoals});      
       res.status(201).json({ goals });
       next();
     }
@@ -146,7 +146,7 @@ goalsRouter
         goal_id,
         updateGoal
       );
-      // req.app.get('io').emit('patch goal', (updated));
+      req.app.get('io').emit('patch goal', (updated));
       res.status(204).end();
     }
     catch (error) {
