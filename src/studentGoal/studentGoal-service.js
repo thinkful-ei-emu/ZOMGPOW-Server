@@ -1,7 +1,13 @@
 const studentGoal ={
-  getClassId(db, id){
+  getStudent(db, id){
     return db('students')
       .where({ id })
+      .first();
+  },
+  getStudentGoal(db, student_id, id){
+    return db('student_goals')
+      .select('*')
+      .where({ student_id, id })
       .first();
   },
   updateSubGoal(db, id, newSubGoalEval){
@@ -11,8 +17,10 @@ const studentGoal ={
   },
   updateLearningTarget(db, id, newLearningTarget){
     return db('student_goals')
-      .where({id: id})
-      .update(newLearningTarget);
+      .where({ id })
+      .update(newLearningTarget)
+      .returning('*')
+      .then(res => res[0]);
   }
 };
 
