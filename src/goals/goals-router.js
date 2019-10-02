@@ -79,8 +79,7 @@ goalsRouter
     
       goals.sort(function (a, b) {
         return a.id - b.id;
-      });
-       
+      });    
       // res.status(201).json({goals, subgoals});      
       res.status(201).json({ goals });
       next();
