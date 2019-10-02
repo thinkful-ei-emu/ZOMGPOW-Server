@@ -1,7 +1,7 @@
 const app = require('../src/app');
 const helpers = require('./test-helpers');
 
-describe.only('Subgoal Endpoints', function(){
+describe('Subgoal Endpoints', function(){
   let db; 
   const testUsers = helpers.makeUsersArray();
   const testClass = helpers.makeClass(testUsers);
@@ -19,32 +19,33 @@ describe.only('Subgoal Endpoints', function(){
   before('cleanup', () =>  helpers.cleanTables(db));
   afterEach('cleanup', () => helpers.cleanTables(db));
 
+  beforeEach('insert users',() =>
+    helpers.seedUsers(
+      db,
+      testUsers,
+    )
+  ); 
+  beforeEach('insert classes',() =>  
+    helpers.seedClass(
+      db,
+      testClass,
+    )
+  );
+  beforeEach('insert students', () =>
+    helpers.seedStudents(
+      db,
+      testStudents,
+    )
+  );
+
   describe('POST /api/subgoals/:student_goal_id', () => {
-    beforeEach('insert users',() =>
-      helpers.seedUsers(
-        db,
-        testUsers,
-      )
-    ); 
-    beforeEach('insert classes',() =>  
-      helpers.seedClass(
-        db,
-        testClass,
-      )
-    );
-    beforeEach('insert students', () =>
-      helpers.seedStudents(
-        db,
-        testStudents,
-      )
-    );
     beforeEach('insert goals', () =>
       helpers.seedGoals(
         db,
         testGoals,
       )
     );
-    beforeEach('insert studnet_goals', () => 
+    beforeEach('insert student_goals', () => 
       helpers.seedStudentGoals(
         db,
         testStudentGoals
@@ -69,24 +70,6 @@ describe.only('Subgoal Endpoints', function(){
     });
   });
   describe('DELETE /api/subgoals/subgoal/:subgoal_id', () => {
-    beforeEach('insert users',() =>
-      helpers.seedUsers(
-        db,
-        testUsers,
-      )
-    ); 
-    beforeEach('insert classes',() =>  
-      helpers.seedClass(
-        db,
-        testClass,
-      )
-    );
-    beforeEach('insert students', () =>
-      helpers.seedStudents(
-        db,
-        testStudents,
-      )
-    );
     beforeEach('insert goals', () =>
       helpers.seedGoals(
         db,

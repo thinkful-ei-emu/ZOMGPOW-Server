@@ -17,6 +17,25 @@ describe('Goals Endpoints', function (){
   before('cleanup', () => helpers.cleanTables(db));
   afterEach('cleanup', () => helpers.cleanTables(db));
 
+  beforeEach('insert users',() =>
+    helpers.seedUsers(
+      db,
+      testUsers,
+    )
+  ); 
+  beforeEach('insert classes',() =>  
+    helpers.seedClass(
+      db,
+      testClass,
+    )
+  );
+  beforeEach('insert students', () =>
+    helpers.seedStudents(
+      db,
+      testStudents,
+    )
+  );
+
   describe('GET /api/goals', () => {
     it('responds with 404', () => {  
       return supertest(app)
@@ -44,24 +63,6 @@ describe('Goals Endpoints', function (){
     });
   }); 
   describe('POST /api/goals/class/:class_id', () => {
-    beforeEach('insert users',() =>
-      helpers.seedUsers(
-        db,
-        testUsers,
-      )
-    ); 
-    beforeEach('insert classes',() =>  
-      helpers.seedClass(
-        db,
-        testClass,
-      )
-    );
-    beforeEach('insert students', () =>
-      helpers.seedStudents(
-        db,
-        testStudents,
-      )
-    );
     it('creates a new goal and responds with 201', () => {
       const class_id = testClass[0].id;
       const newGoal =helpers.makeGoals()[0];
@@ -84,18 +85,6 @@ describe('Goals Endpoints', function (){
     });
   });
   describe('DELETE /api/goals/goal/:goal_id', ()=> {
-    beforeEach('insert users',() =>
-      helpers.seedUsers(
-        db,
-        testUsers,
-      )
-    ); 
-    beforeEach('insert classes',() =>  
-      helpers.seedClass(
-        db,
-        testClass,
-      )
-    );
     it('should respond with 204 and remove the goal', ()=> {
       const remove_goal_id = 2;
       return supertest(app)
@@ -118,25 +107,13 @@ describe('Goals Endpoints', function (){
           });
       });
     });
-    beforeEach('insert users',() =>
-      helpers.seedUsers(
-        db,
-        testUsers,
-      )
-    ); 
-    beforeEach('insert classes',() =>  
-      helpers.seedClass(
-        db,
-        testClass,
-      )
-    );
     beforeEach('insert goals', ()=> 
       helpers.seedGoals(
         db,
         testGoals
       )
     );
-    it.skip('should respond with 204', () => {
+    it('should respond with 204', () => {
       const update_goal_id = 2;
       const updated_goal={
         id: 2,

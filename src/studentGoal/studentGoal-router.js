@@ -9,7 +9,7 @@ studentGoalRouter
     try{
       const {student_id} = req.params;
       const student = await studentService.getStudent(req.app.get('db'), student_id);
-      res.status(201).json({ student });
+      res.status(201).json({student});
     }
     catch(e){
       next(e);
@@ -20,7 +20,6 @@ studentGoalRouter
   .route('/student/:student_id/:student_goal_id')
   .get(async (req, res, next) => {
     try{
-      console.log('hello');
       const {student_id, student_goal_id } = req.params;
       const studentGoal = await studentService.getStudentGoal(req.app.get('db'), student_id, student_goal_id);
       if(studentGoal === undefined)
