@@ -113,28 +113,33 @@ describe('Goals Endpoints', function (){
         testGoals
       )
     );
-    it('should respond with 204', () => {
-      const update_goal_id = 2;
-      const updated_goal={
-        id: 2,
-        class_id: 1,
-        deadline: null,
-        goal_title: 'Test Goal 2 update',
-        goal_description: 'Test Goal Description 2 update',
-        exit_ticket_type: 'short answer',
-        exit_ticket_question: 'Test question 2? update',
-        exit_ticket_options: null,
-        exit_ticket_correct_answer: null
-      }
-      const expected_goal = {
-        ...testGoals[update_goal_id-1],
-        ...updated_goal
-      }
-      return supertest(app)
-        .patch(`/api/goals/goal/${update_goal_id}`)
-        .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
-        .send(updated_goal)
-        .expect(204)
-    })
+    context('Given there are goals', () => {
+      it('should respond with 204', () => {
+        const update_goal_id = 2;
+        const updated_goal={
+          id: 2,
+          class_id: 1,
+          deadline: null,
+          goal_title: 'Test Goal 2 update',
+          goal_description: 'Test Goal Description 2 update',
+          exit_ticket_type: 'short answer',
+          exit_ticket_question: 'Test question 2? update',
+          exit_ticket_options: null,
+          exit_ticket_correct_answer: null
+        }
+        const expected_goal = {
+          ...testGoals[update_goal_id-1],
+          ...updated_goal
+        }
+        return supertest(app)
+          .patch(`/api/goals/goal/${update_goal_id}`)
+          .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
+          .send(updated_goal)
+          .expect(204)
+          .expect((res => {
+            console.log('goals', res.body)
+          }));
+      })
+    });
   });
 }); 

@@ -37,20 +37,19 @@ describe('Subgoal Endpoints', function(){
       testStudents,
     )
   );
-
+  beforeEach('insert goals', () =>
+    helpers.seedGoals(
+      db,
+      testGoals,
+    )
+  );
+  beforeEach('insert studnet_goals', () => 
+    helpers.seedStudentGoals(
+      db,
+      testStudentGoals
+    )
+  );
   describe('POST /api/subgoals/:student_goal_id', () => {
-    beforeEach('insert goals', () =>
-      helpers.seedGoals(
-        db,
-        testGoals,
-      )
-    );
-    beforeEach('insert student_goals', () => 
-      helpers.seedStudentGoals(
-        db,
-        testStudentGoals
-      )
-    );
     it('creates a new subgoal and responds with 201', () => {
       const student_goal_id = 1;
       const newSubGoal = helpers.makeSubGoals()[0];
@@ -70,18 +69,6 @@ describe('Subgoal Endpoints', function(){
     });
   });
   describe('DELETE /api/subgoals/subgoal/:subgoal_id', () => {
-    beforeEach('insert goals', () =>
-      helpers.seedGoals(
-        db,
-        testGoals,
-      )
-    );
-    beforeEach('insert studnet_goals', () => 
-      helpers.seedStudentGoals(
-        db,
-        testStudentGoals
-      )
-    );
     beforeEach('insert student subgoals', () => 
       helpers.seedSubGoals(
         db,

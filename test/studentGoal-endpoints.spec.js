@@ -1,13 +1,13 @@
 const app = require('../src/app');
 const helpers = require('./test-helpers');
 
-describe.only('Student Goal Endpoints', function(){
+describe('Student Goal Endpoints', function(){
   let db; 
   const testUsers = helpers.makeUsersArray();
   const testClass = helpers.makeClass(testUsers);
   const testStudents = helpers.makeStudentsArray(testClass);
   const testGoals = helpers.makeGoals();
-  //const testSubgoals = helpers.makeSubGoals();
+  const testSubgoals = helpers.makeSubGoals();
   const testStudentGoals = helpers.makeStudentGoals(testClass, testStudents, testGoals);
 
   before('make knex instance', () => {
@@ -86,9 +86,89 @@ describe.only('Student Goal Endpoints', function(){
     });
   });
   describe('PATCH /api/studentgoals/learning_target/:student_goal_id', () => {
-
+    beforeEach('insert goals', () =>
+      helpers.seedGoals(
+        db,
+        testGoals,
+      )
+    );
+    beforeEach('insert student_goals', () => 
+      helpers.seedStudentGoals(
+        db,
+        testStudentGoals
+      )
+    );
+    it('should respond with 204', () => {
+    const student_goal_id = testStudentGoals[0].id;
+    const updated_goal = {
+      id: 1,
+      class_id: 1,
+      goal_title: 'Test Goal 1',
+      goal_description: 'Test Goal Description 1',
+      exit_ticket_type: 'multiple choice',
+      exit_ticket_question: 'Test question 1?',
+      exit_ticket_options: ['1', '2', '3', '4'],
+      exit_ticket_correct_answer: 'B',
+      iscomplete: 'true',
+      evaluation: 1,
+      student_response: 'A'
+    };
+    const expected_goal = {
+      ...testGoals[student_goal_id-1],
+      ...updated_goal
+    };
+    return supertest(app)
+      .patch(`/api/studentgoals/learning_target/${student_goal_id}`)
+      .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
+      .send(updated_goal)
+      .expect(204)
+      .expect((res => {
+        console.log('studentgoal', res.body)
+      }));
+    });
   });
   describe('PATCH /api/studentgoals/subgoal/:id', () => {
-
+    beforeEach('insert goals', () =>
+      helpers.seedGoals(
+        db,
+        testGoals,
+      )
+    );
+    beforeEach('insert student_goals', () => 
+      helpers.seedStudentGoals(
+        db,
+        testStudentGoals
+      )
+    );
+    beforeEach('insert subgoals', () => 
+      helpers.seedSubGoals(
+        db,
+        testSubgoals
+      )
+    );
+    it('should respond with 204', () => {
+    const id = testSubgoals[0].id;
+    const updated_subgoal = {
+      id: 1,
+      student_goal_id: 1,
+      subgoal_title: 'title 1',
+      subgoal_description: 'description 1',
+      iscomplete: 'true',
+      evaluation: 1,
+      student_response: 'A'
+    };
+    const expected_subgoal = {
+      ...testSubgoals[id-1],
+      ...updated_subgoal
+    };
+    return supertest(app)
+      .patch(`/api/studentgoals/learning_target/${id}`)
+      .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
+      .send(updated_subgoal)
+      .expect(204)
+      .expect((res => {
+        console.log('studentgoal', res.body)
+      }));
+    });
   });
 });
