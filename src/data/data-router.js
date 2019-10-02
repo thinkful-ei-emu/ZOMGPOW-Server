@@ -27,8 +27,7 @@ dataRouter
       let dataArr = [];
       //get date_created and date_completed timestamps for each goal
       for (let i = 0; i < dates.length; i++) {
-        //breakup timestamps into hours and minutes
-
+        //breakup timestamps into hours and minutes 
         let createdHours = Number(dates[i]['date_created'].getHours());
         let completedHours = Number(dates[i]['date_completed'].getHours());
         let createdMins = Number(dates[i]['date_created'].getMinutes());
@@ -55,9 +54,10 @@ dataRouter
 
       //update dataArr to include total_completed property
       for (let i = 0; i < dataArr.length; i++) {
-        let completedArr = completed.filter(completed => completed.id === dataArr[i].id)
-        if (completedArr.length > 0) {
-          dataArr[i]["total_completed"] = completedArr[0]["completed"]
+        //find the completed total for specfied goal by id and add the following properties to the dataArr
+        let completedElement = completed.find(completed => completed.id === dataArr[i].id)
+        if (completedElement) {
+          dataArr[i]["total_completed"] = completedElement["completed"]
         }
         else {
           //if no students completed the learning target goal then set total to 0
@@ -67,17 +67,16 @@ dataRouter
 
       //update dataArr to include total_students, avg_completed, eval_total, eval_avg and eval_percent properties
       for (let i = 0; i < dataArr.length; i++) {
-        for (let j = 0; j < totalStudents.length; j++) {
-          //loop through totalStudents and find the matching goal id within the dataArr
-          //if the id matches, add the following properties to the dataArr
-          if (totalStudents[j].id === dataArr[i].id) {
-            dataArr[i]["total_students"] = totalStudents[j]["total_students"]
-            dataArr[i]["avg_completed"] = `${((Number(dataArr[i]["total_completed"]) / Number(totalStudents[j]["total_students"]) * 100)).toFixed(0)}%`
-            dataArr[i]["eval_total"] = totalStudents[j]["eval_total"]
-            dataArr[i]["eval_avg"] = Number(totalStudents[j]["eval_avg"]).toFixed(2);
-            dataArr[i]["eval_percentage"] = `${(((Number(totalStudents[j]["eval_avg"])) / 3) * 100).toFixed(0)}%`;
-          }
+        //find the student total for specfied goal by id and add the following properties to the dataArr
+        let totalStudentsElement = totalStudents.find(total => total.id === dataArr[i].id)
+        if(totalStudentsElement){
+          dataArr[i]["total_students"] = totalStudentsElement["total_students"]
+          dataArr[i]["avg_completed"] = `${((Number(dataArr[i]["total_completed"]) / Number(totalStudentsElement["total_students"]) * 100)).toFixed(0)}%`
+          dataArr[i]["eval_total"] = totalStudentsElement["eval_total"]
+          dataArr[i]["eval_avg"] = Number(totalStudentsElement["eval_avg"]).toFixed(2);
+          dataArr[i]["eval_percentage"] = `${(((Number(totalStudentsElement["eval_avg"])) / 3) * 100).toFixed(0)}%`;
         }
+       
       }
 
       res.status(200).json({ dataArr });
