@@ -50,7 +50,7 @@ goalsRouter
           return res.status(401).json({
             error: `Missing '${key}' in request body`
           });
-        }
+          
       let goal = await GoalsService.insertGoal(req.app.get('db'), newGoal);
       await GoalsService.insertStudentGoals(req.app.get('db'), goal.id, class_id);
       req.app.get('io').emit('new goal', (goal));
