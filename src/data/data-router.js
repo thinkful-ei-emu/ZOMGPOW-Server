@@ -27,9 +27,9 @@ dataRouter
       let dataArr = [];
       //get date_created and date_completed timestamps for each goal
       for (let i = 0; i < dates.length; i++) {
-        //breakup timestamps into hours and minutes
+        //breakup timestamps into hours and minutes      
         let createdHours = Number(dates[i]['date_created'].getHours());
-        let completedHours = Number(dates[i]['date_completed'].getHours());
+        let completedHours = Number(dates[i]['date_created'].getHours());
         let createdMins = Number(dates[i]['date_created'].getMinutes());
         let completedMins = Number(dates[i]['date_completed'].getMinutes());
         //convert both created and completed times to mins
@@ -71,7 +71,7 @@ dataRouter
           //if the id matches, add the following properties to the dataArr
           if (totalStudents[j].id === dataArr[i].id) {
             dataArr[i]["total_students"] = totalStudents[j]["total_students"]
-            dataArr[i]["avg_completed"] = `${Math.ceil(Number(dataArr[i]["total_completed"]) / Number(totalStudents[j]["total_students"]) * 100)}%`
+            dataArr[i]["avg_completed"] = `${((Number(dataArr[i]["total_completed"]) / Number(totalStudents[j]["total_students"]) * 100)).toFixed(0)}%`
             dataArr[i]["eval_total"] = totalStudents[j]["eval_total"]
             dataArr[i]["eval_avg"] = Number(totalStudents[j]["eval_avg"]).toFixed(2);
             dataArr[i]["eval_percentage"] = `${(((Number(totalStudents[j]["eval_avg"])) / 3) * 100).toFixed(0)}%`;

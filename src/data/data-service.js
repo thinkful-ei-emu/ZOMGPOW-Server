@@ -44,8 +44,7 @@ const dataService = {
       .groupBy('student_goals.goal_id')
       .count('* As total_students')
       .sum('student_goals.evaluation As eval_total')
-      .avg('student_goals.evaluation As eval_avg')
-      // .where({ 'class_id': class_id, });
+      .avg('student_goals.evaluation As eval_avg')  
       .whereNotNull('goals.date_completed')
       .andWhere({ 'goals.class_id': class_id });
   },
