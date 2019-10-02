@@ -45,6 +45,7 @@ goalsRouter
         exit_ticket_options,
         exit_ticket_correct_answer
       };
+      console.log('in router body', req.body);
       for (const [key, value] of Object.entries(newGoal))
         if(value === null)
           return res.status(401).json({
@@ -53,7 +54,7 @@ goalsRouter
 
       let goal = await GoalsService.insertGoal(req.app.get('db'), newGoal);
       await GoalsService.insertStudentGoals(req.app.get('db'), goal.id, class_id);
-      req.app.get('io').emit('new goal', (goal));
+      // req.app.get('io').emit('new goal', (goal));
       
       res.status(201)
         .location(path.posix.join(req.originalUrl, `/${goal.id}`))
@@ -119,7 +120,7 @@ goalsRouter
         goal_id,
         updateGoal
       );
-      req.app.get('io').emit('patch goal', (updated));
+      // req.app.get('io').emit('patch goal', (updated));
       res.status(204).end();
     }
     catch(error) {
