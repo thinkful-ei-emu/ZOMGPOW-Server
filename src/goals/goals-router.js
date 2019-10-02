@@ -74,7 +74,7 @@ goalsRouter
       const subgoals = await SubgoalService.getStudentSubGoals(req.app.get('db'), student_id);    
       
       for(let i=0; i < goals.length; i++){
-        goals[i]["subgoals"] = subgoals.filter(subgoal => subgoal.goal_id === goals[i].id);
+        goals[i]['subgoals'] = subgoals.filter(subgoal => subgoal.goal_id === goals[i].id);
       }
 
       // res.status(201).json({goals, subgoals});      
