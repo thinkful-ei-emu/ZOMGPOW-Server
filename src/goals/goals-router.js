@@ -72,15 +72,16 @@ goalsRouter
       const { student_id } = req.params;
       const goals = await GoalsService.getStudentGoals(req.app.get('db'), student_id);
       const subgoals = await SubgoalService.getStudentSubGoals(req.app.get('db'), student_id);
-
+      subgoals.sort(function (a, b) {
+        return a.date_created - b.date_created;
+      });
       for (let i = 0; i < goals.length; i++) {
         goals[i]['subgoals'] = subgoals.filter(subgoal => subgoal.goal_id === goals[i].id);
       }
     
       goals.sort(function (a, b) {
         return a.id - b.id;
-      });
-       
+      });    
       // res.status(201).json({goals, subgoals});      
       res.status(201).json({ goals });
       next();
@@ -100,10 +101,12 @@ goalsRouter
       goals.sort(function (a, b) {
         return a.id - b.id;
       });
-      
+      subgoals.sort(function (a, b) {
+        return a.date_created - b.date_created;
+      });
       let currentGoal = goals[goals.length - 1];
 
-      currentGoal['subgoal'] = subgoals.filter(subgoal => subgoal.goal_id === currentGoal.id);
+      currentGoal['subgoals'] = subgoals.filter(subgoal => subgoal.goal_id === currentGoal.id);
 
       res.status(201).json({ currentGoal });
       next();
