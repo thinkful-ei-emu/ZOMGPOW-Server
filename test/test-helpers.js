@@ -80,8 +80,8 @@ function makeClass(teachers) {
 function makeGoals() {
   return [
     {
-      // class_id: 1,
-      deadline: null,
+      id: 1,
+      class_id: 1,
       goal_title: 'Test Goal 1',
       goal_description: 'Test Goal Description 1',
       exit_ticket_type: 'multiple choice',
@@ -90,8 +90,8 @@ function makeGoals() {
       exit_ticket_correct_answer: 'B'
     },
     {
-      // class_id: 1,
-      deadline: null,
+      id: 2,
+      class_id: 1,
       goal_title: 'Test Goal 2',
       goal_description: 'Test Goal Description 2',
       exit_ticket_type: 'short answer',
@@ -133,7 +133,7 @@ function makeAuthHeader(user, secret = process.env.JWT_SECRET) {
     subject: user.email,
     algorithm: 'HS256',
   });
-  return `Bearer ${token}`;
+  return `bearer ${token}`;
 }
 
 /**
@@ -195,7 +195,6 @@ function seedUsers(db, users) {
 function seedStudents(db, students){
   return db.transaction(async trx => {
     await trx.into('students').insert(students)
-    console.log(students)
     await trx.raw(
       `SELECT setval('students_id_seq', ?)`,
       [students[students.length - 1].id],
@@ -215,7 +214,6 @@ function seedClass(db, classes){
 function seedGoals(db, goals) {
   return db.transaction(async trx => {
     await trx.into('goals').insert(goals)
-
     await trx.raw(
       `SELECT setval('goals_id_seq', ?)`,
       [goals[goals.length - 1].id],
