@@ -66,42 +66,22 @@ describe.only('Class Endpoints', function (){
     it('creates a new goal and responds with 201', () => {
       const class_id = testClass[0].id;
       const newGoal =helpers.makeGoals()[0];
-      console.log('newGoal', newGoal);
       return supertest(app)
         .post(`/api/goals/class/${class_id}`)
         .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
         .send(newGoal)
         .expect(201)
         .expect((res => {
-          console.log('body', res.body);
           expect(res.body.class_id).to.eql(class_id);
           expect(res.body).to.have.property('date_created');
           expect(res.headers.location).to.eql(`/api/goals/class/${class_id}/${res.body.id}`);
           expect(res.body.goal_title).to.eql(newGoal.goal_title);
           expect(res.body.goal_description).to.eql(newGoal.goal_description);
-          expect(res.body.deadline).to.eql(newGoal.deadline);
           expect(res.body.exit_ticket_type).to.eql(newGoal.exit_ticket_type);
           expect(res.body.exit_ticket_question).to.eql(newGoal.exit_ticket_question);
           expect(res.body.exit_ticket_options).to.eql(newGoal.exit_ticket_options);
           expect(res.body.exit_ticket_correct_answer).to.eql(newGoal.exit_ticket_correct_answer);
-        }))
-        .expect(res =>
-          db
-            .from('goals')
-            .select('*')
-            .where({ id: res.body.id })
-            .first()
-            .then(row => {
-              console.log('in db', row);
-              // expect(row.body.goal_title).to.eql(newGoal.goal_title);
-              // expect(row.body.goal_description).to.eql(newGoal.goal_description);
-              // expect(row.body.deadline).to.eql(newGoal.deadline);
-              // expect(row.body.exit_ticket_type).to.eql(newGoal.exit_ticket_type);
-              // expect(row.body.exit_ticket_question).to.eql(newGoal.exit_ticket_question);
-              // expect(row.body.exit_ticket_options).to.eql(newGoal.exit_ticket_options);
-              // expect(row.body.exit_ticket_correct_answer).to.eql(newGoal.exit_ticket_correct_answer);
-            })
-        );
+        }));
     });
   });
   describe('DELETE /api/goals/goal/:goal_id', ()=> {
@@ -127,12 +107,16 @@ describe.only('Class Endpoints', function (){
   });
   describe('PATCH /api/goals/goal/:goal_id', ()=> {
     context('Given no goals', ()=> {
-      it.skip('should respond with 400 and error message', ()=>{
+      it('should respond with 400 and error message', ()=>{
         const update_goal_id= 54321;
         return supertest(app)
-          .patch(`/api/bookmarks/${update_goal_id}`)
+          .patch(`/api/goals/goal/${update_goal_id}`)
           .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
-          .expect(404, { error: {message: 'Request body must contain information fields'}});
+          .expect(400, {
+            error: {
+              message: 'Request body must contain information fields'
+            }
+          });
       });
     });
     beforeEach('insert users',() =>

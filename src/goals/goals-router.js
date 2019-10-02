@@ -23,7 +23,7 @@ goalsRouter
       next(error);
     }
   })
-  .post(jsonParser, async (req, res, next) => {
+  .post(requireAuth, jsonParser, async (req, res, next) => {
     try{
       const { class_id } = req.params;
       const {
@@ -45,13 +45,12 @@ goalsRouter
         exit_ticket_options,
         exit_ticket_correct_answer
       };
-      console.log('in router body', req.body);
       for (const [key, value] of Object.entries(newGoal))
-        if(value === null)
+        if(value === null){
           return res.status(401).json({
             error: `Missing '${key}' in request body`
           });
-
+        }
       let goal = await GoalsService.insertGoal(req.app.get('db'), newGoal);
       await GoalsService.insertStudentGoals(req.app.get('db'), goal.id, class_id);
       // req.app.get('io').emit('new goal', (goal));
@@ -102,7 +101,7 @@ goalsRouter
       next(error);
     }
   })
-  .patch(jsonParser, async (req, res, next) => {
+  .patch(requireAuth, jsonParser, async (req, res, next) => {
     try {
       const { goal_id } = req.params;
       const { goal_title, goal_description, deadline, date_completed } = req.body;

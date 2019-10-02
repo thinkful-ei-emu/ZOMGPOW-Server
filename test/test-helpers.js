@@ -82,7 +82,6 @@ function makeGoals() {
     {
       id: 1,
       class_id: 1,
-      deadline: null,
       goal_title: 'Test Goal 1',
       goal_description: 'Test Goal Description 1',
       exit_ticket_type: 'multiple choice',
@@ -93,7 +92,6 @@ function makeGoals() {
     {
       id: 2,
       class_id: 1,
-      deadline: null,
       goal_title: 'Test Goal 2',
       goal_description: 'Test Goal Description 2',
       exit_ticket_type: 'short answer',
@@ -135,7 +133,7 @@ function makeAuthHeader(user, secret = process.env.JWT_SECRET) {
     subject: user.email,
     algorithm: 'HS256',
   });
-  return `Bearer ${token}`;
+  return `bearer ${token}`;
 }
 
 /**
