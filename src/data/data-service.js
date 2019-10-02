@@ -38,13 +38,15 @@ const dataService = {
   },
 
   getTotalStudents(db, class_id) {
-    return db('student_goals')
-      .select('goal_id As id')
-      .groupBy('goal_id')
+    return db('goals')
+      .leftJoin('student_goals', 'student_goals.goal_id', 'goals.id')
+      .select('student_goals.goal_id As id')
+      .groupBy('student_goals.goal_id')
       .count('* As total_students')
-      .sum('evaluation As eval_total')
-      .avg('evaluation As eval_avg')
-      .where({ 'class_id': class_id, });
+      .sum('student_goals.evaluation As eval_total')
+      .avg('student_goals.evaluation As eval_avg')  
+      .whereNotNull('goals.date_completed')
+      .andWhere({ 'goals.class_id': class_id });
   },
   getStudentResponses(db, class_id, goal_id) {
     return db('students')
