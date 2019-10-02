@@ -27,9 +27,10 @@ dataRouter
       let dataArr = [];
       //get date_created and date_completed timestamps for each goal
       for (let i = 0; i < dates.length; i++) {
-        //breakup timestamps into hours and minutes      
+        //breakup timestamps into hours and minutes
+
         let createdHours = Number(dates[i]['date_created'].getHours());
-        let completedHours = Number(dates[i]['date_created'].getHours());
+        let completedHours = Number(dates[i]['date_completed'].getHours());
         let createdMins = Number(dates[i]['date_created'].getMinutes());
         let completedMins = Number(dates[i]['date_completed'].getMinutes());
         //convert both created and completed times to mins
