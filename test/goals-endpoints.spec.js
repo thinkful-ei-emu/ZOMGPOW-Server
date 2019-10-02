@@ -1,8 +1,7 @@
 const app = require('../src/app');
 const helpers = require('./test-helpers');
-const { expect } = require('chai');
 
-describe.only('Class Endpoints', function (){
+describe('Goals Endpoints', function (){
   let db;
   const testUsers = helpers.makeUsersArray();
   const testClass = helpers.makeClass(testUsers);
@@ -137,7 +136,7 @@ describe.only('Class Endpoints', function (){
         testGoals
       )
     );
-    it('should respond with 204', () => {
+    it.skip('should respond with 204', () => {
       const update_goal_id = 2;
       const updated_goal={
         id: 2,
