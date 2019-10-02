@@ -17,8 +17,10 @@ const studentGoal ={
   },
   updateLearningTarget(db, id, newLearningTarget){
     return db('student_goals')
-      .where({id: id})
-      .update(newLearningTarget);
+      .where({ id })
+      .update(newLearningTarget)
+      .returning('*')
+      .then(res => res[0]);
   }
 };
 

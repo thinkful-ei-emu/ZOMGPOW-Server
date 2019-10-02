@@ -66,7 +66,7 @@ classRouter
   });
 
 classRouter
-  .route('/:class_id/students')
+  .route('/:class_id/class')
   .all(requireAuth)
   .all(async (req, res, next) => {
     try{
@@ -92,6 +92,39 @@ classRouter
       const subgoals = await SubgoalService.getClassSubGoals(req.app.get('db'), class_id);
       const studentGoals = await GoalsService.getStudentGoalsTable(req.app.get('db'), class_id);
       res.status(201).json({students, goals, studentGoals, subgoals});
+      next();
+    }
+    catch(error) {
+      next(error);
+    }
+  });
+
+classRouter
+  .route('/:class_id/students')
+  // .all(requireAuth)
+  .all(async (req, res, next) => {
+    try{
+      const { class_id } = req.params;
+      let students = await ClassService.getStudentsByClassId(req.app.get('db'), class_id);
+      let num_of_stu = [...students].length;
+      let singleClass = await ClassService.getStudentsAndResponseByClassId(req.app.get('db'), class_id, num_of_stu);
+      if (!singleClass) {
+        return res.status(404).json({
+          error: { message: 'Class not found' }
+        });
+      }
+      res.singleClass = singleClass;
+      next();
+    }
+    catch(error) {
+      next(error);
+    }
+  })
+  .get(async (req, res, next) => {
+    try {
+      const { class_id } = req.params;
+      const students = res.singleClass;
+      res.status(201).json({students});
       next();
     }
     catch(error) {
