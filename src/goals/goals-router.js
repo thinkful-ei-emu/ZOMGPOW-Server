@@ -106,7 +106,7 @@ goalsRouter
       });
       let currentGoal = goals[goals.length - 1];
 
-      currentGoal['subgoal'] = subgoals.filter(subgoal => subgoal.goal_id === currentGoal.id);
+      currentGoal['subgoals'] = subgoals.filter(subgoal => subgoal.goal_id === currentGoal.id);
 
       res.status(201).json({ currentGoal });
       next();
