@@ -37,7 +37,7 @@ describe('Protected Endpoints', function () {
     describe(endpoint.name, () => {
       it('responds 401 \'Missing bearer token\' when no bearer token', () => {
         return endpoint.method(endpoint.path)
-          .expect(401, { error: 'Unauthorized Request' });
+          .expect(401, { error: 'Missing basic token' });
       });
 
       it('responds 401 \'Unauthorized request\' when invalid JWT secret', () => {

@@ -8,8 +8,23 @@ studentGoalRouter
   .get(async (req, res, next) => {
     try{
       const {student_id} = req.params;
-      const student = await studentService.getClassId(req.app.get('db'), student_id);
+      const student = await studentService.getStudent(req.app.get('db'), student_id);
       res.status(201).json({student});
+    }
+    catch(e){
+      next(e);
+    }
+  });
+
+studentGoalRouter
+  .route('/student/:student_id/:student_goal_id')
+  .get(async (req, res, next) => {
+    try{
+      const {student_id, student_goal_id } = req.params;
+      const studentGoal = await studentService.getStudentGoal(req.app.get('db'), student_id, student_goal_id);
+      if(studentGoal === undefined)
+        return res.status(401).json({ error: 'Student Goal Doesn\'t exist' });
+      res.status(201).json({studentGoal});
     }
     catch(e){
       next(e);
@@ -36,6 +51,7 @@ studentGoalRouter
         student_goal_id,
         updatedLearningTarget
       );
+      console.log(patchGoal);
       req.app.get('io').emit('patch student goal', (patchGoal));
       res.status(204).end();
     }
