@@ -149,7 +149,7 @@ goalsRouter
         goal_id,
         updateGoal
       );
-      // req.app.get('io').emit('patch goal', (updated));
+      req.app.get('io').emit('patch goal', (updated));
       res.status(204).end();
     }
     catch (error) {

@@ -109,18 +109,42 @@ function makeGoals() {
 function makeSubGoals() {
   return [
     {
-      // student_goal_id: null,
-      subgoal_title: null,
-      subgoal_description: null,
+      id: 1,
+      student_goal_id: 1,
+      subgoal_title: 'title 1',
+      subgoal_description: 'description 1',
     },
     {
-      // student_goal_id: null,
-      subgoal_title: null,
-      subgoal_description: null,
+      id: 2,
+      student_goal_id: 2,
+      subgoal_title: 'title 2',
+      subgoal_description: 'description 2',
     }
   ]
 }
 
+function makeStudentGoals(class_id, student, goal) {
+  return[
+    {
+      id: 1,
+      class_id: class_id[0].id,
+      student_id: student[0].id,
+      goal_id: goal[0].id,
+      iscomplete: false,
+      evaluation: null,
+      student_response: null,
+    },
+    {
+      id: 2,
+      class_id: class_id[0].id,
+      student_id: student[1].id,
+      goal_id: goal[0].id,
+      iscomplete: false,
+      evaluation: null,
+      student_response: null,
+    }
+  ]
+}
 
 /**
  * make a bearer token with jwt for authorization header
@@ -224,10 +248,19 @@ function seedGoals(db, goals) {
 function seedSubGoals(db, subgoals) {
   return db.transaction(async trx => {
     await trx.into('subgoals').insert(subgoals)
-
     await trx.raw(
       `SELECT setval('subgoals_id_seq', ?)`, 
       [subgoals[subgoals.length - 1].id],
+    )
+  })
+}
+
+function seedStudentGoals(db, student_goals) {
+  return db.transaction(async trx => {
+    await trx.into('student_goals').insert(student_goals)
+    await trx.raw(
+      `SELECT setval('student_goals_id_seq', ?)`, 
+      [student_goals[student_goals.length - 1].id],
     )
   })
 }
@@ -239,6 +272,7 @@ module.exports = {
   makeUsersArray,
   makeStudentsArray,
   makeClass,
+  makeStudentGoals,
   makeAuthHeader,
   cleanTables,
   seedUsers,
@@ -248,4 +282,5 @@ module.exports = {
   makeSubGoals,
   seedSubGoals, 
   seedClass,
+  seedStudentGoals,
 }

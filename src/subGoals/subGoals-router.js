@@ -7,7 +7,8 @@ const subGoalRouter = express.Router();
 const jsonBodyParser = express.json();
 
 subGoalRouter
-  .post('/:student_goal_id', requireAuth, jsonBodyParser, async(req, res, next) => {
+  .route('/:student_goal_id')
+  .post(requireAuth, jsonBodyParser, async(req, res, next) => {
     let { subgoal_title, subgoal_description } = req.body;
 
     const { student_goal_id } = req.params;
