@@ -265,8 +265,6 @@ function seedStudentGoals(db, student_goals) {
   })
 }
 
-
-
 module.exports = {
   makeKnexInstance,
   makeUsersArray,

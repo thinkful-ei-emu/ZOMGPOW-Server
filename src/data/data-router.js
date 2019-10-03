@@ -2,8 +2,6 @@ const express = require('express');
 const dataService = require('./data-service');
 const { requireAuth } = require('../middleware/jwt-auth');
 const dataRouter = express.Router();
-// const jsonBodyParser = express.json();
-// const path = require('path');
 
 dataRouter
   .get('/:classId', requireAuth, async (req, res, next) => {
