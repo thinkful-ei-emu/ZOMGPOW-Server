@@ -1,5 +1,5 @@
 const express = require('express');
-const xss = require('xss');
+// const xss = require('xss');
 const classRouter = express.Router();
 const bodyParser = express.json();
 const ClassService = require('./class-service');
@@ -29,11 +29,7 @@ classRouter
 
     newClass.teacher_id = req.user.id;
     newClass.classcode = ClassService.randomSix();
-
-    ClassService.insertClass(
-      req.app.get('db'),
-      newClass
-    )
+    ClassService.insertClass(req.app.get('db'), newClass)
       .then(newClass => {
         res.status(201).location(`/api/class/${newClass.id}`).json(newClass);
       })
@@ -101,7 +97,6 @@ classRouter
 
 classRouter
   .route('/:class_id/students')
-  // .all(requireAuth)
   .all(async (req, res, next) => {
     try{
       const { class_id } = req.params;
@@ -131,13 +126,9 @@ classRouter
       next(error);
     }
   })
-  .delete( bodyParser, async (req, res, next) => {
+  .delete(bodyParser, async (req, res, next) => {
     try {  
       const {user_name} = req.body;
-
-      // accepts class_id but doens't utilize it, may need to upon refactor
-      //const {class_id} = req.params;
-
       await ClassService.deleteStudent(req.app.get('db'), user_name);
       res.status(204).send();
     }
@@ -146,5 +137,4 @@ classRouter
     }
   });
   
-
 module.exports = classRouter;

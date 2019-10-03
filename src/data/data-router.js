@@ -5,7 +5,6 @@ const dataRouter = express.Router();
 // const jsonBodyParser = express.json();
 // const path = require('path');
 
-
 dataRouter
   .get('/:classId', requireAuth, async (req, res, next) => {
     const { classId } = req.params;
