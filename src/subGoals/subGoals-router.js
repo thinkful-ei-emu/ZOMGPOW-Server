@@ -88,7 +88,6 @@ subGoalRouter
     try {
 
       const { subgoal_title } = req.params;
-      console.log(subgoal_title);
 
       const endTime = await subGoalService.getSubGoalTime(req.app.get('db'), subgoal_title);
 
