@@ -15,6 +15,11 @@ describe('Subgoal Endpoints', function(){
     app.set('db', db);
   });
 
+  before('make io instance', () => {
+    const io = require('socket.io').listen(5000);
+    app.set('io', io);
+  });
+
   after('disconnect form db', () => db.destroy());
   before('cleanup', () =>  helpers.cleanTables(db));
   afterEach('cleanup', () => helpers.cleanTables(db));

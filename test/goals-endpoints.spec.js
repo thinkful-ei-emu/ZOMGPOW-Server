@@ -1,6 +1,5 @@
 const app = require('../src/app');
 const helpers = require('./test-helpers');
-// const socket = require('socket.io-client');
 
 describe('Goals Endpoints', function (){
   let db;
@@ -14,6 +13,11 @@ describe('Goals Endpoints', function (){
   before('make knex instance', () => {
     db = helpers.makeKnexInstance();
     app.set('db', db);
+  });
+
+  before('make io instance', () => {
+    const io = require('socket.io').listen(5001);
+    app.set('io', io);
   });
 
   after('disconnect from db', () => db.destroy());
