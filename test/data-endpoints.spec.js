@@ -5,10 +5,8 @@ describe('Data Endpoints', function (){
   let db;
   const testUsers = helpers.makeUsersArray();
   const testClass = helpers.makeClass(testUsers);
-  const testStudents = helpers.makeStudentsArray(testClass);
   const testGoals = helpers.makeGoals();
   const testSubgoals = helpers.makeSubGoals();
-  const testStudentGoals = helpers.makeStudentGoals(testClass, testStudents, testGoals);
 
   before('make knex instance', () => {
     db = helpers.makeKnexInstance();
@@ -39,6 +37,19 @@ describe('Data Endpoints', function (){
         .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
         .expect(200);
     });
-    
+  });
+  describe('GET /api/data/:classId/:goalId/:studentGoalId', () => {
+    it('responds with 200 and data', () => {
+      const classId = testClass[0].id;
+      const goalId = testGoals[0].id;
+      const studentGoalId = testSubgoals[0].student_goal_id;
+      return supertest(app)
+        .get(`/api/data/${classId}/${goalId}/${studentGoalId}`)
+        .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
+        .expect(200)
+        .expect((res => {
+          expect(res.body).to.have.property('studentSubgoals');
+        }));
+    });
   });
 });

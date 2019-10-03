@@ -1,6 +1,3 @@
-const config = require('../config');
-
-
 const dataService = {
   //how long it took a class to get a session goal
   getTimeForGoal(db, class_id) {
@@ -13,6 +10,7 @@ const dataService = {
       .whereNotNull('date_completed')
       .andWhere({ class_id });
   },
+
   getExitTicketInfo(db, id) {
     return db('goals')
       .select(
@@ -29,8 +27,8 @@ const dataService = {
       .groupBy('goal_id')
       .count('* As completed')
       .where({ 'class_id': class_id, 'iscomplete': true });
-
   },
+
   getCorrectResponse(db, goal_id, answer) {
     return db('student_goals')         
       .count('* As correct_response')
@@ -72,13 +70,8 @@ const dataService = {
         'subgoals.subgoal_description As description',
         'subgoals.iscomplete As complete',
         'subgoals.evaluation As eval_score')
-      .where({ student_goal_id })
+      .where({ student_goal_id });
   }
-
-
-
-
-
 };
 
 module.exports = dataService;
