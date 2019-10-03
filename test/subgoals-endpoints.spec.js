@@ -15,40 +15,26 @@ describe('Subgoal Endpoints', function(){
     app.set('db', db);
   });
 
+  before('make io instance', () => {
+    const io = require('socket.io').listen(5000);
+    app.set('io', io);
+  });
+
   after('disconnect form db', () => db.destroy());
   before('cleanup', () =>  helpers.cleanTables(db));
   afterEach('cleanup', () => helpers.cleanTables(db));
 
   beforeEach('insert users',() =>
-    helpers.seedUsers(
-      db,
-      testUsers,
-    )
-  ); 
+    helpers.seedUsers(db, testUsers)); 
   beforeEach('insert classes',() =>  
-    helpers.seedClass(
-      db,
-      testClass,
-    )
-  );
+    helpers.seedClass(db, testClass));
   beforeEach('insert students', () =>
-    helpers.seedStudents(
-      db,
-      testStudents,
-    )
-  );
+    helpers.seedStudents(db, testStudents));
   beforeEach('insert goals', () =>
-    helpers.seedGoals(
-      db,
-      testGoals,
-    )
-  );
-  beforeEach('insert studnet_goals', () => 
-    helpers.seedStudentGoals(
-      db,
-      testStudentGoals
-    )
-  );
+    helpers.seedGoals(db, testGoals));
+  beforeEach('insert student_goals', () => 
+    helpers.seedStudentGoals(db, testStudentGoals));
+
   describe('POST /api/subgoals/:student_goal_id', () => {
     it('creates a new subgoal and responds with 201', () => {
       const student_goal_id = 1;
@@ -70,11 +56,7 @@ describe('Subgoal Endpoints', function(){
   });
   describe('DELETE /api/subgoals/subgoal/:subgoal_id', () => {
     beforeEach('insert student subgoals', () => 
-      helpers.seedSubGoals(
-        db,
-        testSubgoals
-      )
-    );
+      helpers.seedSubGoals(db, testSubgoals));
     it('should delete subgoal and respond with 204', () => {
       const remove_subgoal_id = 1;
       return supertest(app)

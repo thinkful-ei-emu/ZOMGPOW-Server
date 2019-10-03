@@ -38,7 +38,7 @@ studentGoalRouter
       const { student_goal_id } = req.params;
       const { iscomplete, evaluation, student_response } = req.body;
       const updatedLearningTarget = { iscomplete, evaluation, student_response };
-      const numberOfValues = Object.values(updatedLearningTarget).filter(Boolean).length;
+      const numberOfValues = Object.values(updatedLearningTarget).length;
       if(numberOfValues === 0) {
         return res.status(400).json({
           error: {
@@ -51,7 +51,6 @@ studentGoalRouter
         student_goal_id,
         updatedLearningTarget
       );
-      console.log(patchGoal);
       req.app.get('io').emit('patch student goal', (patchGoal));
       res.status(204).end();
     }
@@ -80,6 +79,7 @@ studentGoalRouter
         id,
         updatedSubGoal
       );
+
       req.app.get('io').emit('patch subgoal', (patchSubgoal));
       res.status(204).end();
     }

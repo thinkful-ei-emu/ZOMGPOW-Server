@@ -131,8 +131,8 @@ function makeStudentGoals(class_id, student, goal) {
       student_id: student[0].id,
       goal_id: goal[0].id,
       iscomplete: false,
-      evaluation: null,
-      student_response: null,
+      evaluation: 2,
+      student_response: 'A',
     },
     {
       id: 2,
@@ -140,8 +140,8 @@ function makeStudentGoals(class_id, student, goal) {
       student_id: student[1].id,
       goal_id: goal[0].id,
       iscomplete: false,
-      evaluation: null,
-      student_response: null,
+      evaluation: 1,
+      student_response: 'C',
     }
   ]
 }
@@ -264,8 +264,6 @@ function seedStudentGoals(db, student_goals) {
     )
   })
 }
-
-
 
 module.exports = {
   makeKnexInstance,
