@@ -38,7 +38,7 @@ studentGoalRouter
       const { student_goal_id } = req.params;
       const { iscomplete, evaluation, student_response } = req.body;
       const updatedLearningTarget = { iscomplete, evaluation, student_response };
-      const numberOfValues = Object.values(updatedLearningTarget).filter(Boolean).length;
+      const numberOfValues = Object.values(updatedLearningTarget).length;
       if(numberOfValues === 0) {
         return res.status(400).json({
           error: {
