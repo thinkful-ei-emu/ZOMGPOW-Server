@@ -18,9 +18,7 @@ describe('Auth Endpoints', function () {
   });
 
   after('disconnect from db', () => db.destroy());
-
   before('cleanup', () => helpers.cleanTables(db));
-
   afterEach('cleanup', () => helpers.cleanTables(db));
 
   /**
@@ -43,8 +41,7 @@ describe('Auth Endpoints', function () {
       };
 
       it(`responds with 400 required error when '${field}' is missing`, () => {
-        delete loginAttemptBody[field];
-
+        loginAttemptBody[field] = null;
         return supertest(app)
           .post('/api/auth/teacher/login')
           .send(loginAttemptBody)

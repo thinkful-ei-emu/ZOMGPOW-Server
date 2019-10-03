@@ -51,7 +51,6 @@ studentGoalRouter
         student_goal_id,
         updatedLearningTarget
       );
-      console.log(patchGoal);
       req.app.get('io').emit('patch student goal', (patchGoal));
       res.status(204).end();
     }
