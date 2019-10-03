@@ -89,6 +89,7 @@ const RegistrationService = {
     if (nameArr[1]===undefined){
       return nameArr[0];
     }
+
     let userName = nameArr[0].charAt(0) + nameArr[1];
 
     return userName;
