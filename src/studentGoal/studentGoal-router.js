@@ -80,6 +80,7 @@ studentGoalRouter
         id,
         updatedSubGoal
       );
+
       req.app.get('io').emit('patch subgoal', (patchSubgoal));
       res.status(204).end();
     }

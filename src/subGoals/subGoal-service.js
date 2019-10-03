@@ -18,6 +18,18 @@ const subGoalService ={
       .select('*')
       .where({ goal_id });
   },
+  updateSubGoalTimer(knex, id, end_time){
+    return knex('subgoals')
+      .where({id})
+      .update({end_time})
+      .returning('*')
+      .then(([subGoal]) => subGoal);
+  },
+  getSubGoalTime(knex, subgoal_title){
+    return knex('subgoals')
+      .where({subgoal_title})
+      .select('end_time');
+  },
   insertSubGoal(knex, newSubGoal){
     return knex
       .insert(newSubGoal)
