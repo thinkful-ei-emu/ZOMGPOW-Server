@@ -20,23 +20,11 @@ describe('Student Goal Endpoints', function(){
   afterEach('cleanup', () => helpers.cleanTables(db));
 
   beforeEach('insert users',() =>
-    helpers.seedUsers(
-      db,
-      testUsers,
-    )
-  ); 
+    helpers.seedUsers(db, testUsers)); 
   beforeEach('insert classes',() =>  
-    helpers.seedClass(
-      db,
-      testClass,
-    )
-  );
+    helpers.seedClass(db, testClass));
   beforeEach('insert students', () =>
-    helpers.seedStudents(
-      db,
-      testStudents,
-    )
-  );
+    helpers.seedStudents(db, testStudents,));
 
   describe('GET /api/studentgoals/student/:student_id', () => {
     const student_id = testStudents[0].id;
@@ -87,17 +75,9 @@ describe('Student Goal Endpoints', function(){
   });
   describe('PATCH /api/studentgoals/learning_target/:student_goal_id', () => {
     beforeEach('insert goals', () =>
-      helpers.seedGoals(
-        db,
-        testGoals,
-      )
-    );
+      helpers.seedGoals(db, testGoals));
     beforeEach('insert student_goals', () => 
-      helpers.seedStudentGoals(
-        db,
-        testStudentGoals
-      )
-    );
+      helpers.seedStudentGoals(db, testStudentGoals));
     it('should respond with 204', () => {
     const student_goal_id = testStudentGoals[0].id;
     const updated_goal = {
@@ -122,30 +102,15 @@ describe('Student Goal Endpoints', function(){
       .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
       .send(updated_goal)
       .expect(204)
-      .expect((res => {
-        console.log('studentgoal', res.body)
-      }));
     });
   });
   describe('PATCH /api/studentgoals/subgoal/:id', () => {
     beforeEach('insert goals', () =>
-      helpers.seedGoals(
-        db,
-        testGoals,
-      )
-    );
+      helpers.seedGoals(db, testGoals));
     beforeEach('insert student_goals', () => 
-      helpers.seedStudentGoals(
-        db,
-        testStudentGoals
-      )
-    );
+      helpers.seedStudentGoals(db, testStudentGoals));
     beforeEach('insert subgoals', () => 
-      helpers.seedSubGoals(
-        db,
-        testSubgoals
-      )
-    );
+      helpers.seedSubGoals(db, testSubgoals));
     it('should respond with 204', () => {
     const id = testSubgoals[0].id;
     const updated_subgoal = {
@@ -166,9 +131,6 @@ describe('Student Goal Endpoints', function(){
       .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
       .send(updated_subgoal)
       .expect(204)
-      .expect((res => {
-        console.log('studentgoal', res.body)
-      }));
     });
   });
 });

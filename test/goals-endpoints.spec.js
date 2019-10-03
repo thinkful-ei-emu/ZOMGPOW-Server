@@ -1,5 +1,6 @@
 const app = require('../src/app');
 const helpers = require('./test-helpers');
+// const socket = require('socket.io-client');
 
 describe('Goals Endpoints', function (){
   let db;
@@ -7,6 +8,8 @@ describe('Goals Endpoints', function (){
   const testClass = helpers.makeClass(testUsers);
   const testStudents = helpers.makeStudentsArray(testClass);
   const testGoals = helpers.makeGoals();
+  const testSubgoals = helpers.makeSubGoals();
+  const testStudentGoals = helpers.makeStudentGoals(testClass, testStudents, testGoals);
 
   before('make knex instance', () => {
     db = helpers.makeKnexInstance();
@@ -18,23 +21,17 @@ describe('Goals Endpoints', function (){
   afterEach('cleanup', () => helpers.cleanTables(db));
 
   beforeEach('insert users',() =>
-    helpers.seedUsers(
-      db,
-      testUsers,
-    )
-  ); 
+    helpers.seedUsers(db, testUsers)); 
   beforeEach('insert classes',() =>  
-    helpers.seedClass(
-      db,
-      testClass,
-    )
-  );
+    helpers.seedClass(db, testClass));
   beforeEach('insert students', () =>
-    helpers.seedStudents(
-      db,
-      testStudents,
-    )
-  );
+    helpers.seedStudents(db, testStudents));
+  beforeEach('insert goals', () =>
+    helpers.seedGoals(db, testGoals));
+  beforeEach('insert student_goals', () => 
+    helpers.seedStudentGoals(db, testStudentGoals));
+  beforeEach('insert subgoals', () => 
+    helpers.seedSubGoals(db, testSubgoals));
 
   describe('GET /api/goals', () => {
     it('responds with 404', () => {  
@@ -45,23 +42,94 @@ describe('Goals Endpoints', function (){
     });
   }); 
   describe('GET /api/goals/class/:class_id', () => {
-    const class_id = 1234;
+    const class_id = testClass[0].id;
     it('responds with 201', () => {  
       return supertest(app)
         .get(`/api/goals/class/${class_id}`)
         .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
-        .expect(201);
+        .expect(201)
+        .expect((res => {
+          expect(res.body).to.have.property('goals');
+          expect(res.body).to.have.property('subgoals');
+          expect(res.body.goals).to.have.lengthOf(2);
+          expect(res.body.subgoals).to.have.lengthOf(2);
+          expect(res.body.goals[0].id).to.eql(testGoals[0].id);
+          expect(res.body.goals[0].class_id).to.eql(testGoals[0].class_id);
+          expect(res.body.goals[0].goal_title).to.eql(testGoals[0].goal_title);
+          expect(res.body.goals[0].goal_description).to.eql(testGoals[0].goal_description);
+          expect(res.body.goals[0]).to.have.property('date_created');
+          expect(res.body.goals[0].exit_ticket_type).to.eql(testGoals[0].exit_ticket_type);
+          expect(res.body.goals[0].exit_ticket_question).to.eql(testGoals[0].exit_ticket_question);
+          expect(res.body.goals[0].exit_ticket_options).to.eql(testGoals[0].exit_ticket_options);
+          expect(res.body.goals[0].exit_ticket_correct_answer).to.eql(testGoals[0].exit_ticket_correct_answer);
+          expect(res.body.subgoals[0].id).to.eql(testSubgoals[0].id);
+          expect(res.body.subgoals[0].student_goal_id).to.eql(testSubgoals[0].student_goal_id);
+          expect(res.body.subgoals[0].subgoal_title).to.eql(testSubgoals[0].subgoal_title);
+          expect(res.body.subgoals[0].subgoal_description).to.eql(testSubgoals[0].subgoal_description);
+          expect(res.body.subgoals[0]).to.have.property('date_created');
+          expect(res.body.subgoals[0]).to.have.property('iscomplete');
+          expect(res.body.subgoals[0]).to.have.property('evaluation');
+          expect(res.body.subgoals[0]).to.have.property('class_id');
+          expect(res.body.subgoals[0]).to.have.property('student_response');
+        }))
     });
   }); 
   describe('GET /api/goals/student/:student_id', () => {
-    const student_id = 1234;
+    const student_id = testStudents[0].id;
     it('responds with 201', () => {  
       return supertest(app)
         .get(`/api/goals/student/${student_id}`)
         .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
-        .expect(201);
+        .expect(201)
+        .expect((res => {
+          expect(res.body).to.have.property('goals');
+          expect(res.body.goals[0].id).to.eql(testGoals[0].id);
+          expect(res.body.goals[0].class_id).to.eql(testGoals[0].class_id);
+          expect(res.body.goals[0].goal_title).to.eql(testGoals[0].goal_title);
+          expect(res.body.goals[0].goal_description).to.eql(testGoals[0].goal_description);
+          expect(res.body.goals[0]).to.have.property('deadline');
+          expect(res.body.goals[0]).to.have.property('date_completed');
+          expect(res.body.goals[0]).to.have.property('date_created');
+          expect(res.body.goals[0]).to.have.property('exit_ticket_type');
+          expect(res.body.goals[0]).to.have.property('exit_ticket_question');
+          expect(res.body.goals[0]).to.have.property('exit_ticket_options');
+          expect(res.body.goals[0]).to.have.property('exit_ticket_correct_answer');
+          expect(res.body.goals[0].sg_id).to.eql(testStudentGoals[0].id);
+          expect(res.body.goals[0].student_id).to.eql(testStudentGoals[0].student_id);
+          expect(res.body.goals[0].iscomplete).to.eql(testStudentGoals[0].iscomplete);
+          expect(res.body.goals[0].evaluation).to.eql(testStudentGoals[0].evaluation);
+          expect(res.body.goals[0]).to.have.property('subgoals');
+        }))
     });
   }); 
+  describe('GET /api/goals/student/current/:student_id', () => {
+    const student_id = testStudents[0].id;
+    it('responds with 201 and current goals', () => {
+      return supertest(app)
+        .get(`/api/goals/student/current/${student_id}`)
+        .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
+        .expect(201)
+        .expect((res => {
+          expect(res.body).to.have.property('currentGoal');
+          expect(res.body.currentGoal.id).to.eql(testGoals[0].id);
+          expect(res.body.currentGoal.class_id).to.eql(testGoals[0].class_id);
+          expect(res.body.currentGoal.goal_title).to.eql(testGoals[0].goal_title);
+          expect(res.body.currentGoal.goal_description).to.eql(testGoals[0].goal_description);
+          expect(res.body.currentGoal).to.have.property('deadline');
+          expect(res.body.currentGoal).to.have.property('date_completed');
+          expect(res.body.currentGoal).to.have.property('date_created');
+          expect(res.body.currentGoal).to.have.property('exit_ticket_type');
+          expect(res.body.currentGoal).to.have.property('exit_ticket_question');
+          expect(res.body.currentGoal).to.have.property('exit_ticket_options');
+          expect(res.body.currentGoal).to.have.property('exit_ticket_correct_answer');
+          expect(res.body.currentGoal.sg_id).to.eql(testStudentGoals[0].id);
+          expect(res.body.currentGoal.student_id).to.eql(testStudentGoals[0].student_id);
+          expect(res.body.currentGoal.iscomplete).to.eql(testStudentGoals[0].iscomplete);
+          expect(res.body.currentGoal.evaluation).to.eql(testStudentGoals[0].evaluation);
+          expect(res.body.currentGoal).to.have.property('subgoals');
+        }))
+    });
+  });
   describe('POST /api/goals/class/:class_id', () => {
     it('creates a new goal and responds with 201', () => {
       const class_id = testClass[0].id;
@@ -107,12 +175,6 @@ describe('Goals Endpoints', function (){
           });
       });
     });
-    beforeEach('insert goals', ()=> 
-      helpers.seedGoals(
-        db,
-        testGoals
-      )
-    );
     context('Given there are goals', () => {
       it('should respond with 204', () => {
         const update_goal_id = 2;
@@ -126,20 +188,13 @@ describe('Goals Endpoints', function (){
           exit_ticket_question: 'Test question 2? update',
           exit_ticket_options: null,
           exit_ticket_correct_answer: null
-        }
-        const expected_goal = {
-          ...testGoals[update_goal_id-1],
-          ...updated_goal
-        }
+        };
         return supertest(app)
           .patch(`/api/goals/goal/${update_goal_id}`)
           .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
           .send(updated_goal)
-          .expect(204)
-          .expect((res => {
-            console.log('goals', res.body)
-          }));
-      })
+          .expect(204);
+      });        
     });
   });
 }); 

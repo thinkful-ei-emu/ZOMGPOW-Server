@@ -1,5 +1,5 @@
 const express = require('express');
-const xss = require('xss');
+// const xss = require('xss');
 const classRouter = express.Router();
 const bodyParser = express.json();
 const ClassService = require('./class-service');
