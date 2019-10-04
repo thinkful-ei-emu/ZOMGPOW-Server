@@ -60,23 +60,23 @@ When your new project is ready for deployment, add a new Heroku application with
 Endpoints
 ==========
 
-1. /api/register/teacher
+#### 1. /api/register/teacher
 - Expects request body containing: password, full_name, email
 - Responds with: an object containing id, full_name, email
 
-2. /api/register/student
+#### 2. /api/register/student
 - request body containing: full_name and class_id
 - Responds with: an object containing id, full_name, user_name, and class_id
 
-3. /api/auth/teacher/login
+#### 3. /api/auth/teacher/login
 - request body containing: email and password
 - Responds with: an email and an authToken
 
-4. /api/auth/student/login
+#### 4. /api/auth/student/login
 - request body containing: a username
 - Responds with: a username
 
-5. GET /api/class
+#### 5. GET /api/class
 - Responds with:
 
 [ 
@@ -90,7 +90,7 @@ Endpoints
     "date_modified": null
   },
   {
-      
+
     "id": 6,
     "class_title": "math",
     "classcode": 148447,
@@ -100,10 +100,10 @@ Endpoints
   },
 ]
 
-6. POST /api/class
+#### 6. POST /api/class
 request body containing: a class_title
 
-7. GET /api/class/:classId/students
+#### 7. GET /api/class/:classId/students
 - Responds with:
 
 [    {
@@ -130,15 +130,15 @@ request body containing: a class_title
     }
 ]
 
-8. POST /api/subgoals/:student_goal_id 
+#### 8. POST /api/subgoals/:student_goal_id 
 
-9. DELETE /api/subgoals/subgoal/:subgoal_id
+#### 9. DELETE /api/subgoals/subgoal/:subgoal_id
 - Responds with: 204
 
-10. PATCH /api/subgoals/subgoal/:subgoal_id
+#### 10. PATCH /api/subgoals/subgoal/:subgoal_id
 - Responds with: 204
 
-11. GET /api/goals/class/:class_id
+#### 11. GET /api/goals/class/:class_id
 - Responds with:
 
 {
@@ -170,9 +170,9 @@ request body containing: a class_title
     ]
 }
 
-12. POST /api/goals/class/:class_id
+#### 12. POST /api/goals/class/:class_id
 
-13. GET /api/goals/student/:student_id
+#### 13. GET /api/goals/student/:student_id
 - Responds with:
 
 {
@@ -207,14 +207,14 @@ request body containing: a class_title
     ]
 }
 
-14. DELETE /api/goals/goal/:goal_id
+#### 14. DELETE /api/goals/goal/:goal_id
 - Responds with: 204
 
-15. PATCH /api/goals/goal/:goal_id
+#### 15. PATCH /api/goals/goal/:goal_id
 - Responds with: 204
 
-16. PATCH /api/studentgoals/learning_target/:class_id/:student_id/:goal_id
+#### 16. PATCH /api/studentgoals/learning_target/:class_id/:student_id/:goal_id
 - Responds with: 204
 
-17. PATCH /api/studentgoals/subgoal/:subgoal_id
+#### 17. PATCH /api/studentgoals/subgoal/:subgoal_id
 - Responds with: 204
