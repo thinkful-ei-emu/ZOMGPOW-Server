@@ -65,15 +65,15 @@ Endpoints
 - Responds with: an object containing id, full_name, email
 
 #### 2. /api/register/student
-- request body containing: full_name and class_id
+- Expects request body containing: full_name and class_id
 - Responds with: an object containing id, full_name, user_name, and class_id
 
 #### 3. /api/auth/teacher/login
-- request body containing: email and password
+- Expects request body containing: email and password
 - Responds with: an email and an authToken
 
 #### 4. /api/auth/student/login
-- request body containing: a username
+- Expects request body containing: a username
 - Responds with: a username
 
 #### 5. GET /api/class
@@ -101,7 +101,7 @@ Endpoints
 ]
 
 #### 6. POST /api/class
-request body containing: a class_title
+Expects request body containing: a class_title
 
 #### 7. GET /api/class/:classId/students
 - Responds with:
