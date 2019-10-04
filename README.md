@@ -101,7 +101,7 @@ Endpoints
 ]
 
 #### 6. POST /api/class
-Expects request body containing: a class_title
+- Expects request body containing: a class_title
 
 #### 7. GET /api/class/:classId/students
 - Responds with:
