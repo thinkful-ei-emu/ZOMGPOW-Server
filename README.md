@@ -80,7 +80,8 @@ Endpoints
 - Responds with:
 
 [ 
-  {   
+  {  
+
     "id": 5,
     "class_title": "5th Grade",
     "classcode": 8321,
@@ -104,8 +105,8 @@ request body containing: a class_title
 7. GET /api/class/:classId/students
 - Responds with:
 
-[    
-    {
+[    {
+
         "full_name": "Student a",
         "user_name": "sa",
         "goal": "write a story about the favorite thing you did during the summer",
@@ -140,7 +141,9 @@ request body containing: a class_title
 - Responds with:
 
 {
+
     "goals": [
+
         {
             "id": 2,
             "class_id": 3,
@@ -170,8 +173,11 @@ request body containing: a class_title
 
 13. GET /api/goals/student/:student_id
 - Responds with:
+
 {
+
     "goals": [
+
         {
             "id": 1,
             "class_id": 4,
