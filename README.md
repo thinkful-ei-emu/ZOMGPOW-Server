@@ -61,43 +61,27 @@ Endpoints
 ==========
 
 1. /api/register/teacher
-- Expects request body containing:
-
-password, full_name, email
-
-- Responds with:
-
-an object containing id, full_name, email
+- Expects request body containing: password, full_name, email
+- Responds with: an object containing id, full_name, email
 
 2. /api/register/student
-- request body containing:
-
- full_name and class_id
-- Responds with:
-
-an object containing id, full_name, user_name, and class_id
+- request body containing: full_name and class_id
+- Responds with: an object containing id, full_name, user_name, and class_id
 
 3. /api/auth/teacher/login
-- request body containing:
-
-email and password
-- Responds with:
-
-an email and an authToken
+- request body containing: email and password
+- Responds with: an email and an authToken
 
 4. /api/auth/student/login
-- request body containing:
-
-a username
-- Responds with:
-
-a username
+- request body containing: a username
+- Responds with: a username
 
 5. GET /api/class
 - Responds with:
 
 [ 
-  {   
+  {  
+
     "id": 5,
     "class_title": "5th Grade",
     "classcode": 8321,
@@ -116,15 +100,13 @@ a username
 ]
 
 6. POST /api/class
-request body containing:
-
-a class_title
+request body containing: a class_title
 
 7. GET /api/class/:classId/students
 - Responds with:
 
-[    
-    {
+[    {
+
         "full_name": "Student a",
         "user_name": "sa",
         "goal": "write a story about the favorite thing you did during the summer",
@@ -150,20 +132,18 @@ a class_title
 8. POST /api/subgoals/:student_goal_id 
 
 9. DELETE /api/subgoals/subgoal/:subgoal_id
-- Responds with:
-
-204
+- Responds with: 204
 
 10. PATCH /api/subgoals/subgoal/:subgoal_id
-- Responds with:
-
-204
+- Responds with: 204
 
 11. GET /api/goals/class/:class_id
 - Responds with:
 
 {
+
     "goals": [
+
         {
             "id": 2,
             "class_id": 3,
@@ -193,8 +173,11 @@ a class_title
 
 13. GET /api/goals/student/:student_id
 - Responds with:
+
 {
+
     "goals": [
+
         {
             "id": 1,
             "class_id": 4,
@@ -224,21 +207,13 @@ a class_title
 }
 
 14. DELETE /api/goals/goal/:goal_id
-- Responds with:
-
-204
+- Responds with: 204
 
 15. PATCH /api/goals/goal/:goal_id
-- Responds with:
-
-204
+- Responds with: 204
 
 16. PATCH /api/studentgoals/learning_target/:class_id/:student_id/:goal_id
-- Responds with:
-
-204
+- Responds with: 204
 
 17. PATCH /api/studentgoals/subgoal/:subgoal_id
-- Responds with:
-
-204
+- Responds with: 204
