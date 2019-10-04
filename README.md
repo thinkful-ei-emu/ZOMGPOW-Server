@@ -1,31 +1,112 @@
+# Sprout
+Live Link: [Sprout App](https://sprout-app.now.sh/)
+
+## Developers:
+```Ashley Oelbaum, Christopher Martin, Martha Plantz, Nicholas Gunter, Whitney Wallace, Mantong Zhao```
+
+## What is Sprout?
+Sprout is a formative assessment tool used to help teachers deliver specific, goal-oriented, and timely feedback in the classroom.
+
+### Demo Account:
+See what Sprout has to offer by using these login credentials:
+
+#### *`Email: Teacher@email.com`*
+#### *`Password: Password1!`*
+
+## Screenshots
+### Teacher Dashboard:
+<img src="src/Images/TeacherDashboard.png">
+
+### Create an exit ticket before starting a session:
+<img src="src/Images/ExitTicketModal.png">
+
+### Goal Session in use:
+<img src="src/Images/SproutInAction2.png">
+
+### Teacher View of real-time Exit Ticket responses:
+<img src="src/Images/ExitTicket.png">
+
+### Teacher View of students ready for a check-in:
+<img src="src/Images/Priority.png">
+
+### Student Dashboard View of learning target and personalized goal:
+<img src="src/Images/StudentDashboard.png">
+
+### Student Self-Evaluation:
+<img src="src/Images/StudentEval.png">
+
+### Data Views:
+<img src="src/Images/DataView.png">
+
+<img src="src/Images/DataView2.png">`
+
+## What's to come in Sprout:
+1. Tooltips for dataview
+2. Allow parents to create an account
+3. Present student/class data for parents
+4. Allow teachers to have multiple classes
+5. Teachers can reset forgotten passwords
+6. Calendar functionality 
+
+### Set up
+- Clone the repo both client and server: 
+[Sprout client](https://github.com/thinkful-ei-emu/ZOMGPOW-Client)
+[Sprout Server](https://github.com/thinkful-ei-emu/ZOMGPOW-Server)
+- Start the application `npm start`
+- Start nodemon for the application `npm run dev`
+- Run the tests `npm test`
+
+### Deploy
+When your new project is ready for deployment, add a new Heroku application with `heroku create`. This will make a new git remote called "heroku" and you can then `npm run deploy` which will push to this remote's master branch.
+
+### Tech Stack - Frontend 
+- JavaScript
+- React
+- HTML5
+- CSS
+
+### Tech Stack - Backend
+- Node.js
+- PostgreSQL
+
+### Libraries
+- Socket.io
+- Express
+- Knex
+
+### Testing - Frontend
+- Jest
+
+### Testing - Backend
+- Mocha
+- Chai
+- Supertest
 
 Endpoints
 ==========
 
-/api/register/teacher
+#### 1. /api/register/teacher
+- Expects request body containing: password, full_name, email
+- Responds with: an object containing id, full_name, email
 
-expects a request body containing password, full_name, email
-responds with an object containing id, full_name, email
+#### 2. /api/register/student
+- Expects request body containing: full_name and class_id
+- Responds with: an object containing id, full_name, user_name, and class_id
 
-/api/register/student
+#### 3. /api/auth/teacher/login
+- Expects request body containing: email and password
+- Responds with: an email and an authToken
 
-expects a request body containing full_name and class_id
-responds with an object containing id, full_name, user_name, and class_id
+#### 4. /api/auth/student/login
+- Expects request body containing: a username
+- Responds with: a username
 
-/api/auth/teacher/login
+#### 5. GET /api/class
+- Responds with:
 
-expects an email and password
-sends back an email and an authToken
-
-/api/auth/student/login
-
-expects a username
-sends back a username
-
-GET /api/class
-response sample:  
 [ 
-  {   
+  {  
+
     "id": 5,
     "class_title": "5th Grade",
     "classcode": 8321,
@@ -34,6 +115,7 @@ response sample:
     "date_modified": null
   },
   {
+
     "id": 6,
     "class_title": "math",
     "classcode": 148447,
@@ -43,13 +125,14 @@ response sample:
   },
 ]
 
-POST /api/class
-expects: class_title
+#### 6. POST /api/class
+- Expects request body containing: a class_title
 
-GET /api/class/:classId/students
-response sample: 
-[    
-    {
+#### 7. GET /api/class/:classId/students
+- Responds with:
+
+[    {
+
         "full_name": "Student a",
         "user_name": "sa",
         "goal": "write a story about the favorite thing you did during the summer",
@@ -72,19 +155,21 @@ response sample:
     }
 ]
 
-POST /api/subgoals/:student_goal_id 
-response:
+#### 8. POST /api/subgoals/:student_goal_id 
 
-DELETE /api/subgoals/subgoal/:subgoal_id
-response: 204
+#### 9. DELETE /api/subgoals/subgoal/:subgoal_id
+- Responds with: 204
 
-PATCH /api/subgoals/subgoal/:subgoal_id
-response: 204
+#### 10. PATCH /api/subgoals/subgoal/:subgoal_id
+- Responds with: 204
 
-GET /api/goals/class/:class_id
-response:
+#### 11. GET /api/goals/class/:class_id
+- Responds with:
+
 {
+
     "goals": [
+
         {
             "id": 2,
             "class_id": 3,
@@ -110,13 +195,15 @@ response:
     ]
 }
 
-POST /api/goals/class/:class_id
-response:
+#### 12. POST /api/goals/class/:class_id
 
-GET /api/goals/student/:student_id
-expects:
+#### 13. GET /api/goals/student/:student_id
+- Responds with:
+
 {
+
     "goals": [
+
         {
             "id": 1,
             "class_id": 4,
@@ -145,27 +232,14 @@ expects:
     ]
 }
 
-DELETE /api/goals/goal/:goal_id
-expects: 204
+#### 14. DELETE /api/goals/goal/:goal_id
+- Responds with: 204
 
-PATCH /api/goals/goal/:goal_id
-expects: 204
+#### 15. PATCH /api/goals/goal/:goal_id
+- Responds with: 204
 
-PATCH /api/studentgoals/learning_target/:class_id/:student_id/:goal_id
-and 
-PATCH /api/studentgoals/subgoal/:subgoal_id
-response:204
-    -Used to update subgoals and student_goals to reflect student self-evaluation
+#### 16. PATCH /api/studentgoals/learning_target/:class_id/:student_id/:goal_id
+- Responds with: 204
 
-
-## Scripts
-
-Start the application `npm start`
-
-Start nodemon for the application `npm run dev`
-
-Run the tests `npm test`
-
-## Deploying
-
-When your new project is ready for deployment, add a new Heroku application with `heroku create`. This will make a new git remote called "heroku" and you can then `npm run deploy` which will push to this remote's master branch.
+#### 17. PATCH /api/studentgoals/subgoal/:subgoal_id
+- Responds with: 204
