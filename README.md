@@ -1,7 +1,7 @@
 # Sprout
 Live Link: [Sprout App](https://sprout-app.now.sh/)
 
-GitHub Repo: [Sprout Client](https://github.com/thinkful-ei-emu/ZOMGPOW-Client/blob/development/README.md)
+GitHub Repo: [Sprout Client](https://github.com/thinkful-ei-emu/ZOMGPOW-Client)
 
 ## Developers:
 ```Ashley Oelbaum, Christopher Martin, Martha Plantz, Nicholas Gunter, Whitney Wallace, Mantong Zhao```
